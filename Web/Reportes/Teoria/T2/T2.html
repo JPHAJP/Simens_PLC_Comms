@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio Robótica Aplicada</title>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="../../../Recursos\Archivos\styles.css">
+    <!--Background color-->
+    <style>
+        body {
+            background-color: #2f3132;
+        }
+    </style>
+    <!-- Prism CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css"
+        rel="stylesheet" />
+
+    <!-- Prism JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+
+
+</head>
+
+<body id="page-top">
+    <!-- Navigation -->
+    <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand"><a>Menu</a></li>
+            <li class="sidebar-nav-item"><a href="../../../../index.html#page-top">Inicio</a></li>
+            <li class="sidebar-nav-item"><a href="../../../../index.html#about">Nosotros</a></li>
+            <li class="sidebar-nav-item"><a href="../../../../index.html#portfolio">Portfolio</a></li>
+            <li class="sidebar-nav-item"><a href="../../../../index.html#contact">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Trabajo 2</h1>
+                <p class="lead fw-normal text-white-50 mb-0">Programación con sistemas de enclavamiento</p>
+                <a class="btn btn-primary btn-xl" href="../../../teoria.html">Regresar a Teoría</a>
+            </div>
+        </div>
+    </header>
+    <!--Info-->
+    <section class="py-5 text-white">
+        <div class="container px-4 px-lg-5 my-5">
+            <h3 class="text-secondary mb-0">Introducción</h3>
+            <div class="row gx-4 gx-lg-5">
+                <div class="col-lg-6">
+                    <p>Se utiliza un análisis geométrico de los robots para su cinemática inversa.
+                    </p>
+                    </p>
+                    <a class="btn btn-primary btn-xl" href="assets/Cinematica Inversa.pdf" target="_blank">
+                        Descargar teoría PDF</a>
+                </div>
+                <div class="col-lg-6">
+                    <img class="img-fluid" width="50%" height="auto"
+                        src="https://www.opiron.com/wp-content/uploads/2020/10/enclavamiento-motor.jpg"
+                        alt="...">
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Events Section -->
+    <section id="events" class="events section">
+        <div class="container" data-aos="fade-up">
+            <div class="row">
+                <div class="d-flex align-items-stretch">
+                    <div class="card col-md-12 d-flex align-items-stretch">
+                        <div class="card-img">
+                            <!-- <video width="100%" height="auto" src="assets/FluidSIM.mp4" controls muted autoplay
+                                loop></video> -->
+                            <iframe id="pdfViewer" src="assets/Cinematica Inversa.pdf" width="100%"
+                                height="800px"></iframe>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="">Teoría de cinemática Inversa</a>
+                            </h5>
+                            <p class="fst-italic text-center"></p>
+                            <p class="card-text"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-5 text-white">
+        <div class="container px-4 px-lg-5 my-5">
+            <h3 class="text-secondary mb-0">Código</h3>
+            <div class="row gx-4 gx-lg-5">
+                <div class="col-lg-12">
+                    <pre class="line-numbers">
+<code class="language-python">import sympy as sp
+    import numpy as np
+    
+    # Robot esferico --------------------------------------------------------------
+    name = "Robot Esferico"
+    th1, th2 = sp.symbols('th1 th2')
+    a1, a2, a3, a4, a5, h, d1 = sp.symbols('a1 a2 a3 a4 a5 h d1')
+    x, y, z = sp.symbols('x y z')
+    
+    a4 = z-a1
+    a5 = sp.sqrt(x**2 + y**2)
+    h=sp.sqrt(a5**2 + a4**2)
+    
+    d1 = h -a2 -a3
+    th1 = sp.atan(y/x)
+    th2 = sp.atan(a4/a5)
+    
+    # Mostrar los resultados
+    print(f"\n--- Inverse by Geometry {name} ---")
+    print("th1:", sp.deg(th1))
+    print("th2:", sp.deg(th2))
+    print("d1:", d1)
+    
+    # Robot articulado -----------------------------------------------------------
+    name = "Robot Articulado"
+    th1, th2, th3 = sp.symbols('th1 th2 th3')
+    a1, a2, a3, n1, n2, n3 = sp.symbols('a1 a2 a3 n1 n2 n3')
+    x, y, z = sp.symbols('x y z')
+    
+    n1 = z-a1
+    n2 = sp.sqrt(x**2 + y**2)
+    n3 = sp.sqrt(n1**2 + n2**2)
+    
+    alpha1 = sp.atan(n1/n2)
+    alpha2 = sp.acos(-(a3**2 - (a2**2) - (n3**2))/(2*a2*n3))
+    alpha3 = sp.acos(-(n3**2 - (a2**2) - (a3**2))/(2*a2*a3))
+    
+    th1 = sp.atan(y/x)
+    th2 = alpha1 - alpha2
+    th3 = sp.rad(180) - alpha3
+    
+    # Mostrar los resultados
+    print(f"\n--- Inverse by Geometry {name} ---")
+    print("th1:", sp.deg(th1))
+    print("th2:", sp.deg(th2))
+    print("th3:", sp.deg(th3))
+    
+    # Robot PRP V_alineado ------------------------------------------------------------------
+    name = "Robot PRP V_alineado"
+    th1 = sp.symbols('th1')
+    d1, d2 = sp.symbols('d1 d2')
+    a1, a2 = sp.symbols('a1 a2')
+    x, y, z = sp.symbols('x y z')
+    
+    d1 = z - a1
+    d2 = sp.sqrt(x**2 + y**2)-a2
+    th1 = sp.atan(y/x)
+    
+    # Mostrar los resultados
+    print(f"\n--- Inverse by Geometry {name} ---")
+    print("th1:", sp.deg(th1))
+    print("d1:", d1)
+    print("d2:", d2)
+    
+    # Robot PRP V_no_alineado ------------------------------------------------------------------
+    name = "Robot PRP V_no_alineado"
+    th1 = sp.symbols('th1')
+    d1, d2 = sp.symbols('d1 d2')
+    a1, a2, a3, h, phi1, phi2 = sp.symbols('a1 a2 a3 h phi1 phi2')
+    x, y, z = sp.symbols('x y z')
+    
+    h = sp.sqrt(x**2 + y**2)
+    
+    phi1 = sp.atan(x/y)
+    phi2 = sp.atan(a3/h)
+    
+    d1 = z - a1
+    d2 = (sp.atan(phi2)*a3)-a2
+    th1 = sp.atan(y/x)
+    
+    # Mostrar los resultados
+    print(f"\n--- Inverse by Geometry {name} ---")
+    print("th1:", sp.deg(th1))
+    print("d1:", d1)
+    print("d2:", d2)</code></pre>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px;">
+                <div class="card col-md-8 d-flex align-items-stretch">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <img class="card-img-top" src="assets/Inverse_kinematics.jpg" alt="Imagen 2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-center mt-3">
+                            <h5 class="card-title"><a href="#">Robots</a></h5>
+                            <p class="fst-italic text-black">Se presentan 3 robots: Esférico, Articulado & PRP</p>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </section>
+    <section class=" text-white">
+        <div class="container mt-5">
+            <h2 class="text-center mb-4">Referencias Bibliográficas</h2>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    Niku, S. B. (2020). <i>Introduction to robotics: Analysis, control, applications</i>. John Wiley and
+                    Sons Ltd.
+                </li>
+                <li class="list-group-item">
+                    Craig, J. J. (2018). <i>Introduction to robotics: Mechanics and control</i>. Pearson.
+                </li>
+                <li class="list-group-item">
+                    D'Addario, M. (2016). <i>Manual de robótica industrial: Fundamentos, usos y aplicaciones</i>.
+                    CreateSpace Independent Publishing Platform.
+                </li>
+            </ul>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container px-4 px-lg-5"></div>
+        <ul class="list-inline mb-5">
+            <li class="list-inline-item">
+                <a class="social-link rounded-circle text-white mr-3"
+                    href="https://mx.linkedin.com/in/jos%C3%A9-pablo-hern%C3%A1ndez-alonso-03a195256"><i
+                        class="icon-social-linkedin"></i></a>
+            </li>
+            <li class="list-inline-item">
+                <a class="social-link rounded-circle text-white mr-3"
+                    href="https://www.instagram.com/jose_pablo_ha?igsh=MTlvb2s1ejFuY210MQ%3D%3D&utm_source=qr"><i
+                        class="icon-social-instagram"></i></a>
+            </li>
+            <li class="list-inline-item">
+                <a class="social-link rounded-circle text-white" href="https://github.com/JPHAJP"><i
+                        class="icon-social-github"></i></a>
+            </li>
+        </ul>
+        <img src="../../../Recursos/Imagenes/IM3.png" alt="University Logo" style="width:100px;">
+        <p>Universidad Iberoamericana Puebla.</p>
+        <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title"
+            rel="cc:attributionURL" href="https://jphajp.github.io/Robotica/">Portafolio Robótica Aplicada</a>
+        by <a rel="cc:attributionURL dct:creator" property="cc:attributionName"
+            href="https://github.com/JPHAJP">José Pablo Hernández Alonso</a> is licensed under <a
+            href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank"
+            rel="license noopener noreferrer" style="display:inline-block;">CC BY-NC-SA 4.0<img
+                style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img
+                style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img
+                style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img
+                style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="../../../Recursos\Archivos\scripts.js"></script>
+    <!-- Prism.js script -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script> -->
+    <!-- Prism.js plugin for line numbers -->
+    <!-- <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.js"></script> -->
+    <!-- Prism.js plugin for toolbar -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/toolbar/prism-toolbar.min.js"></script> -->
+    <!-- Prism.js plugin for copy to clipboard functionality -->
+    <!-- <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script> -->
+</body>
+
+</html>

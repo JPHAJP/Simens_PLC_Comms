@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="es-MX"> <!-- Cambiar a español mexicano -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio Redes Digitales</title>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Simple line icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
+        rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+        rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="Recursos\Archivos\styles.css">
+    <!--Background color-->
+    <style>
+        body {
+            background-color: #2f3132;
+        }
+    </style>
+    <!-- Prism CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.css"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/toolbar/prism-toolbar.min.css"
+        rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+</head>
+
+<body id="page-top">
+    <!-- Navigation -->
+    <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand"><a>Menu</a></li>
+            <li class="sidebar-nav-item"><a href="index.html#page-top">Inicio</a></li>
+            <li class="sidebar-nav-item"><a href="index.html#about">Nosotros</a></li>
+            <li class="sidebar-nav-item"><a href="index.html#portfolio">Portfolio</a></li>
+            <li class="sidebar-nav-item"><a href="index.html#contact">Contacto</a></li>
+        </ul>
+    </nav>
+    <!-- Portafolio menu -->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Proyecto Final</h1>
+                <p class="lead fw-normal text-white-50 mb-0">Documentación del proyecto final</p>
+                <a class="btn btn-primary btn-xl" href="index.html#portfolio">Regresar a Portafolio</a>
+            </div>
+        </div>
+    </header>
+    <!--Info-->
+    <section class="py-5 text-white">
+        <div class="container px-4 px-lg-5 my-5">
+            <h3 class="text-secondary mb-0">Descripción</h3>
+            <div class="row gx-4 gx-lg-5">
+                <div class="col-lg-6">
+                    <p>El proyecto trató del desarrollo de un sistema de automatización para una cafetería, la cual
+                        requería de una mayor eficiencia y buscaba una solución tecnológica que mostrará a un robot
+                        preparando café para fines tanto publicitarios como de automatización de procesos.</p>
+                    <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\Reporte_automatización_proyecto_final.pdf"
+                        target="_blank">Reporte PDF</a>
+                </div>
+                <div class="col-lg-6">
+                    <img class="img-fluid" width="70%" height="auto" src="Recursos/Imagenes/Robot_barista.jpg"
+                        alt="...">
+                </div>
+            </div>
+        </div>
+        <div class="container px-4 px-lg-5 my-5">
+            <h3 class="text-secondary mb-0">Objetivo general</h3>
+            <div class="row gx-4 gx-lg-5">
+                <div class="col-lg-12">
+                    <p>• Construir un barista mediante procesos automatizados aplicando los procesos vistos en clase
+                        (electrotecnia, electroneumática, motores, PLC y sensores) con el propósito de optimizar el
+                        proceso de preparación de café.</p>
+                </div>
+            </div>
+        </div>
+        <div class="container px-4 px-lg-5 my-5">
+            <h3 class="text-secondary mb-0">Objetivos específicos</h3>
+            <div class="row gx-4 gx-lg-5">
+                <div class="col-lg-12">
+                    <ul class="list-group">
+                        <li class="list-group-item">• Diseñar y construir un circuito neumático que permita controlar el
+                            flujo y entrega final del café ya preparado.</li>
+                        <li class="list-group-item">• Diseñar y construir un circuito eléctrico que permita seleccionar el tipo de café y de leche que guste el 
+                            usuario.
+                            </li>
+                        <li class="list-group-item">• Crear un diagrama de bloques ejecutable en el PLC para el control de un motor a pasos (selector de 
+                            leche) y comunicación con mediante pines I/O con Robot UR5e para establecer la secuencia de trabajo
+                            para la elaboración de un café.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Events Section -->
+    <section class="page-section" style="margin-left: 5%; margin-right: 5%;">
+        <div style="position: relative; width: 100%; height: 0; padding-top: 56.2500%;
+            padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+            border-radius: 8px; will-change: transform;">
+            <iframe loading="lazy"
+                style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+                src="https://www.canva.com/design/DAGVeDyDh10/IOxRv433wzuPoA2xj2uJYg/view?embed"
+                allowfullscreen="allowfullscreen" allow="fullscreen">
+            </iframe>
+        </div>
+    </section>
+    <!-- Sections for Report -->
+    <section class="py-5 text-white">
+        <div class="container px-4 px-lg-5 my-5">
+
+            <!-- Contexto y Problemática -->
+            <div class="container">
+                <h3 class="text-secondary mb-3">Contexto y problemática que resuelve</h3>
+                <p>
+                    En eventos masivos o lugares concurridos donde se requiere algún servicio de cafetería (como pueden
+                    ser eventos sociales, juntas en oficinas de trabajo, entre otros), la lentitud en el servicio de
+                    café debido a la necesidad de supervisión humana directa para garantizar la atención puede generar
+                    algunos errores o atrasos, como los siguientes:
+                </p>
+                <ul>
+                    <li>Filas largas y tiempos de espera prolongados, que afectan la experiencia del usuario.</li>
+                    <li>Costos operativos mayores, al requerir la contratación de personal adicional para atender la
+                        demanda.</li>
+                    <li>Falta de consistencia en la calidad del servicio, debido al cansancio del personal o a errores
+                        humanos en momentos de alta presión.</li>
+                </ul>
+                <p>
+                    Una propuesta de solución a dichos inconvenientes es la instalación de un mecanismo automático que
+                    funcione como barista de café, que cuente con las siguientes características:
+                </p>
+                <ul>
+                    <li>Aceleración del proceso de servicio mediante un sistema lineal e inmediato que permite preparar
+                        y servir cafés de forma continua y precisa.</li>
+                    <li>Eliminar la necesidad de personal humano dedicado, reduciendo costos operativos y liberando
+                        recursos para otras tareas.</li>
+                    <li>Garantizar un servicio consistente, ofreciendo la misma calidad en cada taza sin importar el
+                        volumen de usuarios.</li>
+                    <li>Optimizar la experiencia del cliente, reduciendo filas y tiempos de espera, y permitiendo que
+                        los asistentes disfruten de su café sin estrés.</li>
+                </ul>
+            </div>
+
+            <!-- Propuesta de Automatización -->
+            <div class="container">
+                <h3 class="text-secondary mb-3">Propuesta de automatización</h3>
+                <p>
+                    La propuesta se basa en desarrollar un sistema de barista automatizado que utilice tecnología
+                    avanzada para mejorar la experiencia del servicio de café. Este sistema incluirá:
+                </p>
+                <ul>
+                    <li>Un brazo robótico UR5e para realizar tareas clave como el manejo de tazas, la preparación del
+                        café y la interacción precisa con dispensadores automáticos.</li>
+                    <li>Dispensadores automáticos para ingredientes como café, leche, azúcar y otros complementos,
+                        asegurando precisión y rapidez en cada preparación.</li>
+                    <li>Controles de tiempo optimizados para garantizar la eficiencia en la preparación y minimizar
+                        tiempos de espera.</li>
+                    <li>Interfaz intuitiva para los usuarios, permitiendo seleccionar opciones personalizadas de café de
+                        forma rápida y sencilla.</li>
+                </ul>
+                <p>
+                    Este sistema automatizado con el UR5e reducirá las tareas del personal para, lo que permitirá
+                    garantizar una alta consistencia en la calidad del café servido.
+                </p>
+                <!-- Espacio para la imagen -->
+                <div class="text-center mt-4">
+                    <img src="Recursos\Proyecto\Automatización.png"
+                        alt="Representación del sistema automatizado con el UR5e" class="img-fluid" style="width: 70%;">
+                    <p class="mt-2 text-muted">Figura 1: Representación del sistema automatizado con el brazo robótico
+                        UR5e</p>
+                </div>
+            </div>
+
+            <!-- Planos Eléctricos y Neumáticos -->
+            <h3 class="text-secondary mb-3">Plano eléctrico y neumático</h3>
+            <p>
+                A continuación, se muestra el esquema del sistema eléctrico y neumático utilizado en el proyecto. Este
+                esquema detalla la configuración de los componentes y conexiones esenciales para el funcionamiento del
+                sistema automatizado.
+            </p>
+            <!-- Espacio para cargar una imagen -->
+            <div class="text-center my-4">
+                <img src="Recursos\Proyecto\Diagrama_Eléctrico-Neumático.jpg" class="img-fluid"
+                    alt="Plano Eléctrico y Neumático">
+            </div>
+            <!-- Botón para descargar el PDF -->
+            <div class="d-grid gap-2" style="margin-bottom: 2%;">
+                <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\Diagrama_Eléctrico-Neumático.pdf"
+                    target="_blank">Descargar plano en PDF</a>
+            </div>
+            <div class="d-grid gap-2" style="margin-bottom: 2%;">
+                <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\Diagrama_Eléctrico-Neumático.fsprj"
+                    target="_blank">Descargar archivo FluidSim</a>
+            </div>
+
+
+            <!-- Programa de PLC -->
+            <h3 class="text-secondary mb-3">Programa de PLC y UR5e</h3>
+            <p>
+                El siguiente programa de PLC controla la secuencia de preparación de bebidas en la máquina de café
+                automatizada. Utiliza instrucciones de control lógico para garantizar la precisión y eficiencia del
+                sistema. Además se complementa con conexiones al robot UR5e para coordinar las tareas de manipulación.
+            </p>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <img src="Recursos\Proyecto\Programa_Main_PLC.jpg" class="img-fluid"
+                        alt="Programa de PLC - Parte 1">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <img src="Recursos\Proyecto\Programa_db_step_motor.jpg" class="img-fluid"
+                        alt="Programa de PLC - Parte 2">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <img src="Recursos\Proyecto\Programa_Fc_step_motor1.jpg" class="img-fluid"
+                        alt="Programa de PLC - Parte 3">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <img src="Recursos\Proyecto\Programa_Fc_step_motor2.jpg" class="img-fluid"
+                        alt="Programa de PLC - Parte 4">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <img src="Recursos\Proyecto\Programa_UR1.jpg" class="img-fluid" alt="Programa de UR - Parte 1">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <img src="Recursos\Proyecto\Programa_UR2.jpg" class="img-fluid" alt="Programa de UR - Parte 2">
+                </div>
+            </div>
+            <!-- Botón para descargar el PDF -->
+            <div class="d-grid gap-2" style="margin-bottom: 2%;">
+                <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\Programa_PLC_PDF.zip"
+                    target="_blank">Descargar programa PLC en PDF</a>
+            </div>
+            <div class="d-grid gap-2" style="margin-bottom: 2%;">
+                <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\Programa_PLC.zip" target="_blank">Descargar
+                    proyecto TIA-Portal</a>
+            </div>
+            <div class="d-grid gap-2" style="margin-bottom: 2%;">
+                <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\UR5e_program.urp" target="_blank">Descargar
+                    programa UR5e Script (URP)</a>
+            </div>
+            <div class="d-grid gap-2" style="margin-bottom: 2%;">
+                <a class="btn btn-primary btn-xl"
+                    href="https://www.omc-stepperonline.com/download/CL57T_V4.0.pdf?srsltid=AfmBOor-uAmCgffuhW8boo5hwf0R-MBsrCfIsf3m3fOADCCiCfsm0eIs"
+                    target="_blank">Documentación Driver CL57T & motor 34HS59-5004D</a>
+            </div>
+
+
+
+            <!-- Video y fotografías del Prototipo -->
+            <h3 class="text-secondary mb-3">Video y fotografías</h3>
+            <p>Video del prototipo en funcionamiento mostrando el proceso de preparación de café.</p>
+            <div class="embed-responsive embed-responsive-16by9 mb-4">
+                <video src="Recursos\Proyecto\Proyecto_completo.mp4" width="100%" controls muted autoplay loop
+                    style="margin-left: 0%;"></video>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <img src="Recursos\Proyecto\Panel_electrico.jpg" class="img-fluid" alt="Fotografía panel eléctrico">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <img src="Recursos\Proyecto\Panel_botones.jpg" class="img-fluid" alt="Fotografía panel botones">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <img src="Recursos\Proyecto\Cafetera.jpg" class="img-fluid" alt="Fotografía Cafetera">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <img src="Recursos\Proyecto\Leche.jpg" class="img-fluid" alt="Fotografía dispensador de leche">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <img src="Recursos\Proyecto\Entrega.jpg" class="img-fluid" alt="Fotografía entrega">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <img src="Recursos\Proyecto\UR5e.jpg" class="img-fluid" alt="Fotografía UR5e Conexiones">
+                </div>
+            </div>
+            <div class="embed-responsive embed-responsive-16by9 mb-4">
+                <img src="Recursos\Proyecto\Proyecto_completo.jpg" class="img-fluid" alt="Fotografía del proyecto">
+            </div>
+
+            <!-- Modelos 3D -->
+            <h3 class="text-secondary mb-3">Modelos 3D y piezas para corte láser</h3>
+            <p>Se presdentan los modelos 3D del proyecto.</p>
+
+            <div class="sketchfab-embed-wrapper">
+                <iframe title="Caja_Automatización_O24" frameborder="0" allowfullscreen mozallowfullscreen="true"
+                    webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking
+                    execution-while-out-of-viewport execution-while-not-rendered web-share width="100%" height="480"
+                    src="https://sketchfab.com/models/7f1b38b5169a403d8f7e01cbd39b4a28/embed?ui_theme=dark">
+                </iframe>
+            </div>
+            <div class="d-grid gap-2" style="margin-bottom: .5%;">
+                <a class="btn btn-primary btn-xl" href="https://github.com/JPHAJP/UR5_SRUB_NURSE/tree/main/3D_Models"
+                    target="_blank">Enlace a descarga de piezas</a>
+            </div>
+            <div class="d-grid gap-2" style="margin-bottom: 2%;">
+                <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\QC_STL.zip" target="_blank">Descarga STL</a>
+            </div>
+
+            <div class="sketchfab-embed-wrapper">
+                <iframe title="Caja_Automatización_O24" frameborder="0" allowfullscreen mozallowfullscreen="true"
+                    webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking
+                    execution-while-out-of-viewport execution-while-not-rendered web-share width="100%" height="480"
+                    src="https://sketchfab.com/models/fa187434998a4d8c99f8e8c4f02de1ba/embed?ui_theme=dark">
+                </iframe>
+            </div>
+            <div class="d-grid gap-2" style="margin-bottom: 2%;">
+                <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\Holder.STL" target="_blank">Descarga STL</a>
+            </div>
+
+            <div class="sketchfab-embed-wrapper">
+                <iframe title="Caja_Automatización_O24" frameborder="0" allowfullscreen mozallowfullscreen="true"
+                    webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking
+                    execution-while-out-of-viewport execution-while-not-rendered web-share width="100%" height="480"
+                    src="https://sketchfab.com/models/52748ab33cf946458d99f388942e25ad/embed?ui_theme=dark">
+                </iframe>
+            </div>
+            <div class="d-grid gap-2" style="margin-bottom: 2%;">
+                <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\Milk.STL" target="_blank">Descarga STL</a>
+            </div>
+
+            <div class="sketchfab-embed-wrapper">
+                <iframe title="Caja_Automatización_O24" frameborder="0" allowfullscreen mozallowfullscreen="true"
+                    webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking
+                    execution-while-out-of-viewport execution-while-not-rendered web-share width="100%" height="480"
+                    src="https://sketchfab.com/models/897ec8bbd19f42b892302ef2d16babf8/embed?ui_theme=dark">
+                </iframe>
+            </div>
+            <div class="d-grid gap-2" style="margin-bottom: 2%;">
+                <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\Soporte.zip" target="_blank">Descarga STL</a>
+            </div>
+
+
+            <div class="sketchfab-embed-wrapper">
+                <iframe title="Caja_Automatización_O24" frameborder="0" allowfullscreen mozallowfullscreen="true"
+                    webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking
+                    execution-while-out-of-viewport execution-while-not-rendered web-share width="100%" height="480"
+                    src="https://sketchfab.com/models/161fb9c83643415bab64faa3ca53215c/embed?ui_theme=dark">
+                </iframe>
+            </div>
+            <div>
+                <embed src="Recursos\Proyecto\Panel_botones.pdf" type="application/pdf" width="100%" height="600px" />
+                <div class="d-grid gap-2" style="margin-bottom: 2%;">
+                    <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\Panel_botones.dxf"
+                        target="_blank">Descarga DXF de panel para botones</a>
+                </div>
+            </div>
+
+
+            <div class="sketchfab-embed-wrapper">
+                <iframe title="Caja_Automatización_O24" frameborder="0" allowfullscreen mozallowfullscreen="true"
+                    webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking
+                    execution-while-out-of-viewport execution-while-not-rendered web-share width="100%" height="480"
+                    src="https://sketchfab.com/models/1aec438019c34fb68f57e6dbbcf20093/embed?ui_theme=dark">
+                </iframe>
+            </div>
+            <div>
+                <embed src="Recursos\Proyecto\Caja_motor.pdf" type="application/pdf" width="100%" height="600px" />
+                <div class="d-grid gap-2" style="margin-bottom: 2%;">
+                    <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\Caja_motor.dxf" target="_blank">Descarga
+                        DXF motor a pasos</a>
+                </div>
+            </div>
+
+            <div>
+                <embed src="Recursos\Proyecto\Caja.pdf" type="application/pdf" width="100%" height="600px" />
+                <div class="d-grid gap-2" style="margin-bottom: 2%;">
+                    <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\Caja.dxf" target="_blank">Descarga DXF
+                        caja de entrega</a>
+                </div>
+            </div>
+
+
+            <!-- Lista de Materiales -->
+            <h3 class="text-secondary mb-3">Lista de Materiales</h3>
+            <div class="container">
+                <div class="row">
+                    <!-- Primera columna -->
+                    <div class="col-md-6">
+                        <table class="table table-dark table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10%;">Cantidad</th>
+                                    <th style="width: 50%;">Concepto</th>
+                                    <th style="width: 10%;">Precio</th>
+                                    <th style="width: 30%;">Foto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" class="text-center">Insumos</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Jarras para leche</td>
+                                    <td>$120</td>
+                                    <td><img src="https://i5.walmartimages.com/asr/4dbf23ce-cb74-4729-b2b2-359aad1abfe3.813cf16bea25a67894e00a1aa92b1591.jpeg?odnHeight=612&odnWidth=612&odnBg=FFFFFF"
+                                            alt="Jarras para leche" style="max-width: 120px;"></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>L de leche</td>
+                                    <td>$38</td>
+                                    <td><img src="https://chedrauimx.vtexassets.com/arquivos/ids/38985075/7501295600157_00.jpg?v=638671321816170000"
+                                            alt="L de leche" style="max-width: 120px;"></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Bolsa de azucar</td>
+                                    <td>$25</td>
+                                    <td><img src="https://www.coffeesolutions.com.mx/src/productos/azucar_blanca_refinada_Domino_450169_Img1.jpg"
+                                            alt="Bolsa de azucar" style="max-width: 120px;"></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Paquete de vasos para café (40 pzs)</td>
+                                    <td>$35</td>
+                                    <td><img src="https://www.marketingvending.com/wp/wp-content/uploads/2022/01/vasos-cafe.png"
+                                            alt="Paquete de vasos para café (40 pzs)" style="max-width: 120px;"></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Cafetera</td>
+                                    <td>$700</td>
+                                    <td><img src="https://http2.mlstatic.com/D_NQ_NP_711714-MLU70651937225_072023-O.webp"
+                                            alt="Cafetera" style="max-width: 120px;"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">Tornilleria</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Tornillos M6X60mm y tuercas</td>
+                                    <td>$60</td>
+                                    <td><img src="https://static.grainger.com/rp/s/is/image/Grainger/26LG36_GC01?$glgmain$"
+                                            alt="Tornillos M6X60mm y tuercas" style="max-width: 120px;"></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Tornillo M5x30mm y tuercas</td>
+                                    <td>$27.5</td>
+                                    <td><img src="https://static.grainger.com/rp/s/is/image/Grainger/6EA55_GC01?$glgmain$"
+                                            alt="Tornillo M5x30mm y tuercas" style="max-width: 120px;"></td>
+                                </tr>
+                                <tr>
+                                    <td>15</td>
+                                    <td>Tornillos M4x10mm</td>
+                                    <td>$35</td>
+                                    <td><img src="https://static.grainger.com/rp/s/is/image/Grainger/5YRC4_GC01?$glgmain$"
+                                            alt="Tornillos M4x10mm" style="max-width: 120px;"></td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td>Tuercas M4</td>
+                                    <td>$18</td>
+                                    <td><img src="https://m.media-amazon.com/images/I/51EyaOp6Z4L.jpg" alt="Tuercas M4"
+                                            style="max-width: 120px;"></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Tornillos M10x80mm y tuercas</td>
+                                    <td>$10</td>
+                                    <td><img src="https://static.grainger.com/rp/s/is/image/Grainger/22TZ69_GC01?$glgmain$"
+                                            alt="Tornillos M10x80mm y tuercas" style="max-width: 120px;"></td>
+                                </tr>
+                                <tr>
+                                    <td>12</td>
+                                    <td>Tornillos M1 y tuercas</td>
+                                    <td>$70</td>
+                                    <td><img src="https://static.grainger.com/rp/s/is/image/Grainger/22TZ29_GC01?$glgmain$"
+                                            alt="Tornillos M1 y tuercas" style="max-width: 120px;"></td>
+                                </tr>
+                                <tr>
+                                    <td>12</td>
+                                    <td>Arandelas M1</td>
+                                    <td>$46</td>
+                                    <td><img src="https://m.media-amazon.com/images/I/515PVBS32CL._AC_UF350,350_QL80_.jpg"
+                                            alt="Arandelas M1" style="max-width: 120px;"></td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Segunda columna -->
+                    <div class="col-md-6">
+                        <table class="table table-dark table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10%;">Cantidad</th>
+                                    <th style="width: 50%;">Concepto</th>
+                                    <th style="width: 10%;">Precio</th>
+                                    <th style="width: 30%;">Foto</th>
+                                </tr>
+                            </thead>
+                            <!--ELECTRONICOS-->
+                            <tr>
+                                <td colspan="4" class="text-center">Componentes Electrónicos</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>UR5e </td>
+                                <td>$534,187.5</td>
+                                <td><img src="https://i.ytimg.com/vi/Y2oQa8AACXE/hqdefault.jpg" alt="Ur5 e "
+                                        style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Fuente 5V</td>
+                                <td>$500</td>
+                                <td><img src="https://uelectronics.com/wp-content/uploads/2017/06/AR0091-Fuente-5V-3A-V1.jpg"
+                                        alt="Fuente 5V" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Fuente 24V</td>
+                                <td>$1725</td>
+                                <td><img src="https://www.acon-solutions.com.mx/productos/m/1623954821-69.jpg"
+                                        alt="Fuente 24V" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>relevadores</td>
+                                <td>$300</td>
+                                <td><img src="https://teknebolivia.com/wp-content/uploads/2023/05/rele-1.png"
+                                        alt="relevadores" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Siemens 6ES7214-1AG40-0XB0 S7-1200</td>
+                                <td>$6600</td>
+                                <td><img src="https://m.media-amazon.com/images/I/61A5Fx-K22L.jpg"
+                                        alt="Siemens 6ES7214-1AG40-0XB0 S7-1200" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>50</td>
+                                <td>Clemas</td>
+                                <td>$700</td>
+                                <td><img src="https://http2.mlstatic.com/D_NQ_NP_672760-MLM70893074387_082023-O.webp"
+                                        alt="Clemas" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>motor a pasos 34HS59-5004D y driver cl57t </td>
+                                <td>$1926</td>
+                                <td><img src="https://i.ebayimg.com/thumbs/images/g/WaoAAOSwZQ5mTYZX/s-l1200.jpg"
+                                        alt="motor a pasos 34HS59-5004D y driver cl57t " style="max-width: 120px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Cable 6m</td>
+                                <td>$160</td>
+                                <td><img src="https://img.uline.com/is/image/uline/S-13798BL?$Mobile_Zoom$"
+                                        alt="Cable 6m" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Interruptor termomagnético</td>
+                                <td>$462</td>
+                                <td><img src="https://tamex.mx/wp-content/uploads/EZ9F56332-Interruptor-termomagnetico-Riel-Din-curva-C-Easy9-3P-32A-Schneider-Electric-4.webp"
+                                        alt="Interruptor termomagnético" style="max-width: 120px;"></td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <!--Terce columna centrada-->
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-dark table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10%;">Cantidad</th>
+                                    <th style="width: 50%;">Concepto</th>
+                                    <th style="width: 10%;">Precio</th>
+                                    <th style="width: 30%;">Foto</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td colspan="4" class="text-center">Mecánica</td>
+                            </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td>Pliegos de MDF</td>
+                                <td>$160</td>
+                                <td><img src="https://http2.mlstatic.com/D_Q_NP_2X_633864-MLM77414486543_072024-T.webp"
+                                        alt="Pliegos de MDF" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Tabla triplay 1.2m x 0.8m</td>
+                                <td>$599</td>
+                                <td><img src="https://preciosdematerialesdeconstruccion.com.mx/259-large_default/triplay-de-madera-de-pino-18-mm-pieza.jpg"
+                                        alt="Tabla triplay 1.2m x 0.8m" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Bombas de agua sumergible 5V</td>
+                                <td>$78</td>
+                                <td><img src="https://marboltec.com/wp-content/uploads/2023/11/1117_0.jpg"
+                                        alt="Bombas de agua sumergible 5V" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Manguera de pvc 3m</td>
+                                <td>$69</td>
+                                <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9e-JgwK1YqANC43mhur2NDtI5xgEkU_dnGQ&s"
+                                        alt="Manguera de silicon 3m" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Bisagras</td>
+                                <td>$50</td>
+                                <td><img src="https://i5.walmartimages.com/asr/c9eb02d9-64c9-432c-8c51-fc16a070a12c.2312961399128889c1cccec28d335d81.jpeg?odnHeight=612&odnWidth=612&odnBg=FFFFFF"
+                                        alt="Bisagras" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Pistón simple efecto</td>
+                                <td>$90</td>
+                                <td><img src="https://static.wixstatic.com/media/5b6206_4d35cff42c354c3ca25649c63d80780e~mv2.jpg/v1/fill/w_480,h_480,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5b6206_4d35cff42c354c3ca25649c63d80780e~mv2.jpg"
+                                        alt="Pistón simple efecto" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Pistón de doble efecto</td>
+                                <td>$300</td>
+                                <td><img src="https://http2.mlstatic.com/D_NQ_NP_955164-MLM49858267610_052022-O.webp"
+                                        alt="Pistón de doble efecto" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Manguera para las bombas de leche</td>
+                                <td>$60</td>
+                                <td><img src="https://www.petco.com.mx/medias/?context=bWFzdGVyfGltYWdlc3w0MjIwMzV8aW1hZ2UvZ2lmfGltYWdlcy9oY2QvaGFiLzg4NDg2MzE5MjI3MTguZ2lmfDY3NjI1ZTQ0YmFhNTIyNzE0MjE5ZDIzOTNiZDhlZWMwM2Y4ZTA3MGM0NzQ3ZDNjMzMyZmU4NmQxMzBmOTU0ZjE"
+                                        alt="Manguera para las bombas de leche" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Rodamiento para mesa giratoria</td>
+                                <td>$300</td>
+                                <td><img src="https://m.media-amazon.com/images/I/71YYO0cqiML._AC_UF894,1000_QL80_.jpg"
+                                        alt="Rodamiento para mesa giratoria" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Electroválvulas SAI4-2050</td>
+                                <td>$640</td>
+                                <td><img src="https://s3-us-west-2.amazonaws.com/smciketek/PNEUTRAINER-400/SAI4-2050.png"
+                                        alt="Electroválvulas SAI4-2050" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Multiválvula SAI4-2052</td>
+                                <td>$320</td>
+                                <td><img src="https://dakrox.com/wp-content/uploads/2023/07/distribuidor-neumatico-festo-didactic.jpg"
+                                        alt="Multiválvula SAI4-2052" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Válvula de mantenimiento</td>
+                                <td>$700</td>
+                                <td><img src="https://http2.mlstatic.com/D_NQ_NP_899129-MLM49171461265_022022-O.webp"
+                                        alt="Válvula de mantenimiento" style="max-width: 120px;"></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Piezas impresión 3D (112 g 11.3 h)</td>
+                                <td>$296.13</td>
+                                <td><img src="https://tiendakrear3d.com/wp-content/uploads/2023/05/prusa-original-mk4-kit.webp"
+                                        alt="Piezas impresión 3D (112 g 11.3 h)" style="max-width: 120px;"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Botón para descargar el PDF -->
+            <div class="d-grid gap-2" style="margin-bottom: 5%;">
+                <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\Cotización.xlsx" target="_blank">Cotización en
+                    Excel</a>
+            </div>
+
+
+            <!-- Costo Total del Proyecto -->
+            <h3 class="text-secondary mb-3">Costo Total del Proyecto</h3>
+            <p>
+                El costo total del proyecto, incluyendo todos los materiales y componentes necesarios, es de:
+            </p>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="container col-md-4" style="margin-bottom: 5%;">
+                    <div class="alert alert-info">
+                        <strong>Total:</strong> $551,111.00 MXN
+                    </div>
+                </div>
+                <div class="col-md-4"></div>
+                <p>
+                    Este costo incluye todos los insumos requeridos para la construcción y automatización del sistema.
+                </p>
+            </div>
+
+
+
+            <!-- Conclusiones -->
+            <h3 class="text-secondary mb-3">Conclusiones</h3>
+            <p>Resumen de los resultados obtenidos, beneficios de la automatización, y posibles mejoras
+                futuras.</p>
+
+        </div>
+    </section>
+    <section>
+        <div class="container mt-5">
+            <h2 class="text-center mb-4 text-white">Referencias bibliográficas</h2>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    ACATECH, National Academy of Science and Engineering. (2020). <i>Industrie 4.0 Maturity Index</i>.
+                    Disponible en <a
+                        href="https://www.acatech.de/publikation/industrie-4-0-maturity-index-update-2020/download-pdf?lang=en"
+                        target="_blank">Acatech</a>.
+                </li>
+                <li class="list-group-item">
+                    Bolton, W. (2020). <i>Programmable Logic Controllers and Industrial Automation: An Introduction with
+                        ControlLogix, Siemens, and TIA Portal Examples</i>. Oxford: Butterworth-Heinemann.
+                </li>
+                <li class="list-group-item">
+                    Boylestad, R. L. (2021). <i>Introductory Circuit Analysis</i>. Boston, MA: Pearson.
+                </li>
+                <li class="list-group-item">
+                    Calzada, A., & Salvador, M. (2019). <i>Diseño y construcción de cuadros eléctricos de maniobra y
+                        control</i>. Madrid: Ediciones Paraninfo.
+                </li>
+                <li class="list-group-item">
+                    Deppert, W., & Stoll, R. (2018). <i>Fundamentals of Pneumatic Control Engineering: Components,
+                        Functions, Diagrams, and Practice Applications</i>. Munich: Springer.
+                </li>
+                <li class="list-group-item">
+                    Esteve, J. (2015). <i>Automatismos y cuadros eléctricos industriales</i>. Madrid: Ediciones
+                    Paraninfo.
+                </li>
+                <li class="list-group-item">
+                    Fraden, J. (2016). <i>Handbook of Modern Sensors: Physics, Designs, and Applications</i>. New York,
+                    NY: Springer.
+                </li>
+                <li class="list-group-item">
+                    Gallo, T., Cagnetti, C., Silvestri, C., & Ruggieri, A. (2021). "Industry 4.0 tools in lean
+                    production: A systematic literature review." <i>Procedia Computer Science, 180</i>, 394–403.
+                    Disponible en <a href="https://www.sciencedirect.com/science/article/pii/S1877050921002982"
+                        target="_blank">ScienceDirect</a>.
+                </li>
+                <li class="list-group-item">
+                    Gilchrist, A. (2016). <i>Industry 4.0: The Industrial Internet of Things</i>. Berkeley, CA: Apress.
+                </li>
+                <li class="list-group-item">
+                    Martin, J. C., & Garcia, M. P. (2009). <i>Automatismos Industriales</i>. Madrid: Editorial Editex,
+                    S. A.
+                </li>
+                <li class="list-group-item">
+                    Rehg, J. A., & Sartori, G. J. (2016). <i>Programmable Logic Controllers with Ladder Logic and the
+                        Engineering of Electric Circuits</i>. Upper Saddle River, NJ: Pearson.
+                </li>
+                <li class="list-group-item">
+                    Universal Robots. (2024). <i>UR5e Manual</i>. Disponible en
+                    <a href="https://www.universal-robots.com/manuals/EN/HTML/SW5_19/Content/Landingpages/Web/LandingarmUR5e.htm"
+                        target="_blank">Manual del UR5e</a>.
+                </li>
+                <li class="list-group-item">
+                    Universal Robots. (2024). <i>UR5e Datasheet</i>. Disponible en
+                    <a href="https://www.universal-robots.com/media/1807465/ur5e-rgb-fact-sheet-landscape-a4.pdf"
+                        target="_blank">Hoja de datos del UR5e</a>.
+                </li>
+                <li class="list-group-item">
+                    Universal Robots. (2024). <i>UR5e Official Page</i>. Disponible en
+                    <a href="https://www.universal-robots.com/products/ur5-robot/" target="_blank">Página oficial del
+                        UR5e</a>.
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer text-center" id="contact">
+        <div class="container px-4 px-lg-5"></div>
+        <ul class="list-inline mb-5">
+            <li class="list-inline-item">
+                <a class="social-link rounded-circle text-white mr-3"
+                    href="https://mx.linkedin.com/in/jos%C3%A9-pablo-hern%C3%A1ndez-alonso-03a195256"><i
+                        class="icon-social-linkedin"></i></a>
+            </li>
+            <li class="list-inline-item">
+                <a class="social-link rounded-circle text-white mr-3"
+                    href="https://www.instagram.com/jose_pablo_ha?igsh=MTlvb2s1ejFuY210MQ%3D%3D&utm_source=qr"><i
+                        class="icon-social-instagram"></i></a>
+            </li>
+            <li class="list-inline-item">
+                <a class="social-link rounded-circle text-white" href="https://github.com/JPHAJP"><i
+                        class="icon-social-github"></i></a>
+            </li>
+        </ul>
+        <img src="Recursos/Imagenes/IM3.png" alt="University Logo" style="width:100px;">
+        <p>Universidad Iberoamericana Puebla.</p>
+        <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title"
+                rel="cc:attributionURL" href="https://jphajp.github.io/automatizacion/">Portafolio Automatización de
+                Procesos Industriales</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName"
+                href="https://github.com/JPHAJP">José Pablo Hernández Alonso</a>, Dirk Anton Topcic Martínez & Mary Tere
+            Fuguemann Sarda is licensed under <a
+                href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank"
+                rel="license noopener noreferrer" style="display:inline-block;">CC BY-NC-SA 4.0<img
+                    style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                    src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img
+                    style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                    src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img
+                    style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                    src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img
+                    style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                    src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="../../../Recursos\Archivos\scripts.js"></script>
+    <!-- Prism.js script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <!-- Prism.js plugin for line numbers -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <!-- Prism.js plugin for toolbar -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/toolbar/prism-toolbar.min.js"></script>
+    <!-- Prism.js plugin for copy to clipboard functionality -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+</body>
+
+</html>

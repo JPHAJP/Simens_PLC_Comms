@@ -5,7 +5,7 @@
     <!-- cap 1,3,4 -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portafolio Robótica Aplicada</title>
+    <title>Portafolio Temas Selectos de Mecatrónica</title>
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <!-- Simple line icons-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
@@ -57,7 +57,8 @@
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center text-white">
                 <h1 class="display-4 fw-bolder">Trabajo 1</h1>
-                <p class="lead fw-normal text-white-50 mb-0">Programación en escalera secuencial con tablas de verdad</p>
+                <p class="lead fw-normal text-white-50 mb-0">Programación en escalera secuencial con tablas de verdad
+                </p>
                 <a class="btn btn-primary btn-xl" href="../../../teoria.html">Regresar a Teoría</a>
             </div>
         </div>
@@ -68,18 +69,15 @@
             <h3 class="text-secondary mb-0">Introducción</h3>
             <div class="row gx-4 gx-lg-5">
                 <div class="col-lg-6">
-                    <p>Se utiliza un análisis geométrico de los robots para su cinemática inversa.
+                    <p>Se revisa como realizar programación de sistemas PLC en lenguaje de escalera a partir de lógica combinacional.
                     </p>
-                    </p>
-                    <a class="btn btn-primary btn-xl" href="assets/Cinematica Inversa.pdf" target="_blank">
-                        Descargar teoría PDF</a>
+                    <!-- <a class="btn btn-primary btn-xl" href="assets/Cinematica Inversa.pdf" target="_blank">
+                        Descargar teoría PDF</a> -->
                 </div>
                 <div class="col-lg-6">
                     <img class="img-fluid" width="50%" height="auto"
                         src="https://electropreguntas.com/wp-content/uploads/2023/03/principios-practicos-de-la-tabla-de-verdad-binaria.png"
                         alt="...">
-
-
                 </div>
             </div>
         </div>
@@ -88,17 +86,49 @@
     <section id="events" class="events section">
         <div class="container" data-aos="fade-up">
             <div class="row">
-                <div class="d-flex align-items-stretch">
+                <!-- Primera tarjeta -->
+                <div class="col-md-4 d-flex align-items-stretch">
                     <div class="card col-md-12 d-flex align-items-stretch">
                         <div class="card-img">
-                            <!-- <video width="100%" height="auto" src="assets/FluidSIM.mp4" controls muted autoplay
-                                loop></video> -->
-                            <iframe id="pdfViewer" src="assets/Cinematica Inversa.pdf" width="100%"
-                                height="800px"></iframe>
+                            <iframe id="pdfViewer"
+                                src="../T0/assets/Sistemas automaticos industriales de eventos discretos.pdf#page=26"
+                                width="100%" height="800px">
+                            </iframe>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title"><a href="">Teoría de cinemática Inversa</a>
-                            </h5>
+                            <h5 class="card-title"><a href="">Capítulo 1</a></h5>
+                            <p class="fst-italic text-center"></p>
+                            <p class="card-text"></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Segunda tarjeta -->
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <div class="card col-md-12 d-flex align-items-stretch">
+                        <div class="card-img">
+                            <iframe id="pdfViewer"
+                                src="../T0/assets/Sistemas automaticos industriales de eventos discretos.pdf#page=46"
+                                width="100%" height="800px">
+                            </iframe>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="">Capítulo 3</a></h5>
+                            <p class="fst-italic text-center"></p>
+                            <p class="card-text"></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tercer tarjeta -->
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <div class="card col-md-12 d-flex align-items-stretch">
+                        <div class="card-img">
+                            <iframe id="pdfViewer"
+                                src="../T0/assets/Sistemas automaticos industriales de eventos discretos.pdf#page=74"
+                                width="100%" height="800px">
+                            </iframe>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="">Capítulo 4</a></h5>
                             <p class="fst-italic text-center"></p>
                             <p class="card-text"></p>
                         </div>
@@ -107,116 +137,127 @@
             </div>
         </div>
     </section>
+
     <section class="py-5 text-white">
         <div class="container px-4 px-lg-5 my-5">
-            <h3 class="text-secondary mb-0">Código</h3>
-            <div class="row gx-4 gx-lg-5">
-                <div class="col-lg-12">
-                    <pre class="line-numbers">
-<code class="language-python">import sympy as sp
-    import numpy as np
-    
-    # Robot esferico --------------------------------------------------------------
-    name = "Robot Esferico"
-    th1, th2 = sp.symbols('th1 th2')
-    a1, a2, a3, a4, a5, h, d1 = sp.symbols('a1 a2 a3 a4 a5 h d1')
-    x, y, z = sp.symbols('x y z')
-    
-    a4 = z-a1
-    a5 = sp.sqrt(x**2 + y**2)
-    h=sp.sqrt(a5**2 + a4**2)
-    
-    d1 = h -a2 -a3
-    th1 = sp.atan(y/x)
-    th2 = sp.atan(a4/a5)
-    
-    # Mostrar los resultados
-    print(f"\n--- Inverse by Geometry {name} ---")
-    print("th1:", sp.deg(th1))
-    print("th2:", sp.deg(th2))
-    print("d1:", d1)
-    
-    # Robot articulado -----------------------------------------------------------
-    name = "Robot Articulado"
-    th1, th2, th3 = sp.symbols('th1 th2 th3')
-    a1, a2, a3, n1, n2, n3 = sp.symbols('a1 a2 a3 n1 n2 n3')
-    x, y, z = sp.symbols('x y z')
-    
-    n1 = z-a1
-    n2 = sp.sqrt(x**2 + y**2)
-    n3 = sp.sqrt(n1**2 + n2**2)
-    
-    alpha1 = sp.atan(n1/n2)
-    alpha2 = sp.acos(-(a3**2 - (a2**2) - (n3**2))/(2*a2*n3))
-    alpha3 = sp.acos(-(n3**2 - (a2**2) - (a3**2))/(2*a2*a3))
-    
-    th1 = sp.atan(y/x)
-    th2 = alpha1 - alpha2
-    th3 = sp.rad(180) - alpha3
-    
-    # Mostrar los resultados
-    print(f"\n--- Inverse by Geometry {name} ---")
-    print("th1:", sp.deg(th1))
-    print("th2:", sp.deg(th2))
-    print("th3:", sp.deg(th3))
-    
-    # Robot PRP V_alineado ------------------------------------------------------------------
-    name = "Robot PRP V_alineado"
-    th1 = sp.symbols('th1')
-    d1, d2 = sp.symbols('d1 d2')
-    a1, a2 = sp.symbols('a1 a2')
-    x, y, z = sp.symbols('x y z')
-    
-    d1 = z - a1
-    d2 = sp.sqrt(x**2 + y**2)-a2
-    th1 = sp.atan(y/x)
-    
-    # Mostrar los resultados
-    print(f"\n--- Inverse by Geometry {name} ---")
-    print("th1:", sp.deg(th1))
-    print("d1:", d1)
-    print("d2:", d2)
-    
-    # Robot PRP V_no_alineado ------------------------------------------------------------------
-    name = "Robot PRP V_no_alineado"
-    th1 = sp.symbols('th1')
-    d1, d2 = sp.symbols('d1 d2')
-    a1, a2, a3, h, phi1, phi2 = sp.symbols('a1 a2 a3 h phi1 phi2')
-    x, y, z = sp.symbols('x y z')
-    
-    h = sp.sqrt(x**2 + y**2)
-    
-    phi1 = sp.atan(x/y)
-    phi2 = sp.atan(a3/h)
-    
-    d1 = z - a1
-    d2 = (sp.atan(phi2)*a3)-a2
-    th1 = sp.atan(y/x)
-    
-    # Mostrar los resultados
-    print(f"\n--- Inverse by Geometry {name} ---")
-    print("th1:", sp.deg(th1))
-    print("d1:", d1)
-    print("d2:", d2)</code></pre>
+            <h3 class="text-secondary mb-0">Ejercicios</h3>
+            <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px;">
+                <div class="card col-md-12 d-flex align-items-stretch">
+                    <div class="container">
+                        <div class="card-body text-center mt-3">
+                            <h5 class="card-title"><a href="#">Cálculos en excel</a></h5>
+                            <a class="btn btn-primary btn-xl" href="assets/Practica_1.xlsx" target="_blank"> Descargar archivo</a>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <!-- Ejercicio 1 -->
             <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px;">
-                <div class="card col-md-8 d-flex align-items-stretch">
+                <div class="card col-md-12 d-flex align-items-stretch">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="card">
-                                    <img class="card-img-top" src="assets/Inverse_kinematics.jpg" alt="Imagen 2">
+                                    <video width="100%" height="800px" src="assets/P1_ej1.mp4" controls muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <iframe id="pdfViewer" src="assets/P1_ej1.pdf" width="100%" height="800px"></iframe>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body text-center mt-3">
-                            <h5 class="card-title"><a href="#">Robots</a></h5>
-                            <p class="fst-italic text-black">Se presentan 3 robots: Esférico, Articulado & PRP</p>
+                            <h5 class="card-title"><a href="#">Ejercicio 1</a></h5>
+                            <p class="fst-italic text-black">Programación OR y AND.</p>
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
+            <!-- Ejercicio 2 -->
+            <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px;">
+                <div class="card col-md-12 d-flex align-items-stretch">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="assets/P1_ej2.mp4" controls muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="assets/P1_ej2_PLC1500.mp4" controls muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <iframe id="pdfViewer" src="assets/P1_ej2.pdf" width="100%" height="800px"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-center mt-3">
+                            <h5 class="card-title"><a href="#">Ejercicio 2</a></h5>
+                            <p class="fst-italic text-black">Secuencia de 3 botónes y 3 focos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Ejercicio 3 -->
+            <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px;">
+                <div class="card col-md-12 d-flex align-items-stretch">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="assets/P1_ej3.mp4" controls muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="assets/P1_ej3_PLC1500.mp4" controls muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <iframe id="pdfViewer" src="assets/P1_ej3.pdf" width="100%" height="800px"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-center mt-3">
+                            <h5 class="card-title"><a href="#">Ejercicio 3</a></h5>
+                            <p class="fst-italic text-black">Secuencia de 3 botónes y 3 focos, encendiendo un focco a la vez por número de botones.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Ejercicio 4 -->
+            <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px;">
+                <div class="card col-md-12 d-flex align-items-stretch">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="assets/P1_ej4.mp4" controls muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="assets/P1_ej4_PLC1500.mp4" controls muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <iframe id="pdfViewer" src="assets/P1_ej4.pdf" width="100%" height="800px"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body text-center mt-3">
+                            <h5 class="card-title"><a href="#">Ejercicio 4</a></h5>
+                            <p class="fst-italic text-black">Secuencia de 4 botónes y 4 focos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     <section class=" text-white">
@@ -253,19 +294,20 @@
         <img src="../../../Recursos/Imagenes/IM3.png" alt="University Logo" style="width:100px;">
         <p>Universidad Iberoamericana Puebla.</p>
         <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title"
-            rel="cc:attributionURL" href="https://jphajp.github.io/Robotica/">Portafolio Temas Selectos de Mecatrónica</a>
-        by <a rel="cc:attributionURL dct:creator" property="cc:attributionName"
-            href="https://github.com/JPHAJP">José Pablo Hernández Alonso</a> is licensed under <a
-            href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank"
-            rel="license noopener noreferrer" style="display:inline-block;">CC BY-NC-SA 4.0<img
-                style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
-                src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img
-                style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
-                src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img
-                style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
-                src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img
-                style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
-                src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
+                rel="cc:attributionURL" href="https://jphajp.github.io/Robotica/">Portafolio Temas Selectos de
+                Mecatrónica</a>
+            by <a rel="cc:attributionURL dct:creator" property="cc:attributionName"
+                href="https://github.com/JPHAJP">José Pablo Hernández Alonso</a> is licensed under <a
+                href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank"
+                rel="license noopener noreferrer" style="display:inline-block;">CC BY-NC-SA 4.0<img
+                    style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                    src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img
+                    style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                    src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img
+                    style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                    src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img
+                    style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                    src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
         </div>
     </footer>
 

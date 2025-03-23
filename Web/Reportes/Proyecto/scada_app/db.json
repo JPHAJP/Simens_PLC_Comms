@@ -1,0 +1,62 @@
+{
+    "plc1": {
+        "state": "En espera",
+        "focos": {
+            "encendido": false,
+            "adelante": false,
+            "reversa": false
+        },
+        "botones": {
+            "encender": false,
+            "adelante": false,
+            "reversa": false
+        }
+    },
+    "plc2": {
+        "progress": 0,
+        "focos": {
+            "deteccion": true,
+            "trabajando": false
+        },
+        "botones": {
+            "toggle": false,
+            "reiniciar": false,
+            "skip": false
+        }
+    },
+    "plc3": {
+        "progress": 0,
+        "focos": {
+            "deteccion": true,
+            "trabajando": false
+        },
+        "botones": {
+            "toggle": false,
+            "reiniciar": false,
+            "skip": false
+        }
+    },
+    "robot": {
+        "gcode_line": 0,
+        "total_lines": 100,
+        "foco": "detenido",
+        "botones": {
+            "toggle": false,
+            "reiniciar": false,
+            "skip": false
+        }
+    },
+    "simbolos": {
+        "verde": "trabajando",
+        "amarillo": "detenido",
+        "azul": "terminado"
+    },
+    "log": [
+        "Inicio del sistema",
+        "PLC1: Encendido desactivado",
+        "Revolvedora: Trabajo iniciado",
+        "Revolvedora: Trabajo pausado",
+        "PLC1: Encendido activado",
+        "PLC1: Encendido desactivado"
+    ]
+}

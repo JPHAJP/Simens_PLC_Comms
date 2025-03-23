@@ -1,0 +1,291 @@
+/* ======= Estilos generales ======= */
+body {
+    background-color: #f0f2f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ======= Estilos de Cards ======= */
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    margin-bottom: 20px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    color: white;
+    font-weight: bold;
+    border-radius: 10px 10px 0 0;
+}
+
+/* ======= Log ======= */
+.log-container {
+    height: 250px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f8f9fa;
+}
+
+.log-entry {
+    padding: 5px 10px;
+    border-bottom: 1px solid #eee;
+    animation: fadeIn 0.5s;
+}
+
+.log-entry:last-child {
+    border-bottom: none;
+}
+
+.log-timestamp {
+    font-size: 0.8em;
+    color: #6c757d;
+    margin-right: 5px;
+}
+
+/* ======= Simbología ======= */
+.symbol-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.symbol-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* ======= Animaciones Generales ======= */
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes moveLeft {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+}
+
+/* Animaciones aplicadas a iconos */
+.animate-rotating {
+    display: inline-block;
+    animation: rotate 2s linear infinite;
+}
+
+.animate-pulsing {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ======= Banda transportadora ======= */
+.conveyor-animation {
+    position: relative;
+    height: 40px;
+    overflow: hidden;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.conveyor-belt {
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    background: repeating-linear-gradient(45deg, #adb5bd, #adb5bd 10px, #6c757d 10px, #6c757d 20px);
+}
+
+/* Animaciones para movimiento de la banda */
+.conveyor-belt-forward {
+    animation: moveLeft 10s linear infinite;
+}
+
+.conveyor-belt-reverse {
+    animation: moveLeft 10s linear reverse infinite;
+}
+
+/* ======= Revolvedora ======= */
+.mixer-animation {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    border: 5px solid #6c757d;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mixer-blade {
+    position: absolute;
+    width: 5px;
+    height: 40px;
+    background-color: #343a40;
+}
+
+.mixer-blade:nth-child(2) {
+    transform: rotate(60deg);
+}
+
+.mixer-blade:nth-child(3) {
+    transform: rotate(120deg);
+}
+
+/* Cuando esté activo, se aplica la animación de rotación */
+.mixer-active .mixer-blade {
+    animation: rotate 2s linear infinite;
+}
+
+/* ======= Empacadora Circular ======= */
+.circular-packer {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border: 3px solid #6c757d;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+.packer-section {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    transform-origin: bottom right;
+}
+
+.packer-section:nth-child(1) {
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 123, 255, 0.5);
+}
+
+.packer-section:nth-child(2) {
+    top: 0;
+    right: 0;
+    background-color: rgba(40, 167, 69, 0.5);
+}
+
+.packer-section:nth-child(3) {
+    bottom: 0;
+    right: 0;
+    background-color: rgba(255, 193, 7, 0.5);
+}
+
+.packer-section:nth-child(4) {
+    bottom: 0;
+    left: 0;
+    background-color: rgba(220, 53, 69, 0.5);
+}
+
+.packer-center {
+    position: absolute;
+    width: 30%;
+    height: 30%;
+    top: 35%;
+    left: 35%;
+    background-color: #6c757d;
+    border-radius: 50%;
+}
+
+/* Animación de rotación para la empacadora */
+.packer-active {
+    animation: rotatePacker 3s linear infinite;
+}
+
+@keyframes rotatePacker {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Pulso para el centro cuando esté activo */
+.packer-active .packer-center {
+    animation: pulse 1s ease-in-out infinite;
+}
+
+/* ======= Robot ======= */
+.robot-animation {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    border: 1px solid #ddd;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.robot-arm {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 10px;
+    height: 60px;
+    background-color: #6c757d;
+    transform-origin: bottom center;
+}
+
+.robot-head {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #343a40;
+    border-radius: 3px;
+}
+
+/* Animación para el robot cuando está trabajando */
+.robot-working .robot-arm {
+    animation: robot-movement 4s ease-in-out infinite;
+}
+
+@keyframes robot-movement {
+    0% { transform: rotate(-30deg); }
+    25% { transform: rotate(30deg); }
+    50% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+    100% { transform: rotate(-30deg); }
+}
+
+/* ======= Estilos para Progress Bars ======= */
+.progress {
+    height: 2rem; /* Se aumenta la altura para una mejor visualización */
+}
+
+.progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+/* ======= Otros estilos ======= */
+.gcode-canvas-container {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #f8f9fa;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.badge {
+    padding: 0.5em 0.75em;
+}

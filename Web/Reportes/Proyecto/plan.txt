@@ -1,0 +1,28 @@
+PLC 1
+    Motor para banda transportadora.
+        -Encendido/Apagado
+        -Delante/Reversa
+        *2 Reles 24 V
+        *Motor monofásico
+
+PLC 2
+    Revolvedor de pistones
+        -Contadores
+        -Detector de presencia
+        *2 pistones
+        *3 sensores (dos inductivos y otro)
+
+PLC 3
+    Empacador con Motor / llenado de botella
+        -Contar cada vuelta
+        *Sensor inductivo
+        *Motor monofásico
+        *Variador de velocidad
+
+Robot
+    Control de envio de gcode
+        -Continuar/pausar
+        *Robot UR
+
+
+Todos conectados a interface con OPC

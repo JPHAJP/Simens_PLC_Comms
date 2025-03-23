@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- No background - fully transparent -->
+  
+  <!-- White factory icon -->
+  <path d="M25,70 L25,45 L40,35 L55,45 L55,35 L75,45 L75,70 Z" fill="#ffffff"/>
+</svg>

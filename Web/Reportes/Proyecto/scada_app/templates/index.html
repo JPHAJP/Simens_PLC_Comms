@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gestor OPC Simens </title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos personalizados --> 
+    <link rel="stylesheet" href="/static/css/scada.css">
+    <!-- Favicon con estilo de la class fa-industri -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+
+
+</head>
+
+<body>
+    <div class="container-fluid py-4">
+        <div class="row justify-content-center mb-4">
+            <div class="col-12">
+                <h1 class="text-center mb-4 p-2 bg-primary text-white rounded shadow">Gestor OPC Simens <i
+                        class="fas fa-industry"></i></h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Panel principal - 9 columnas -->
+            <div class="col-lg-9">
+                <div class="row g-3">
+                    <!-- Card 1: Control de Banda Transportadora -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-conveyor-belt"></i> Banda Transportadora</span>
+                                <span id="plc1-state" class="badge bg-secondary">En espera</span>
+                            </div>
+                            <div class="card-body">
+                                <!-- Animación de banda transportadora -->
+                                <div class="conveyor-animation" id="conveyor-animation">
+                                    <div class="conveyor-belt" id="conveyor-belt"></div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <strong>Estado:</strong>
+                                    <div id="plc1-focos" class="d-flex justify-content-around my-2">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="badge bg-secondary mb-1" id="plc1-encendido">Encendido</span>
+                                            <i class="fas fa-power-off"></i>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="badge bg-secondary mb-1" id="plc1-adelante">Adelante</span>
+                                            <i class="fas fa-arrow-right"></i>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="badge bg-secondary mb-1" id="plc1-reversa">Reversa</span>
+                                            <i class="fas fa-arrow-left"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <strong>Control:</strong>
+                                    <div id="plc1-botones" class="d-flex justify-content-around mt-2">
+                                        <button class="btn btn-primary" id="plc1-btn-encender">
+                                            <i class="fas fa-power-off"></i> Encender
+                                        </button>
+                                        <button class="btn btn-primary" id="plc1-btn-adelante">
+                                            <i class="fas fa-arrow-right"></i> Adelante
+                                        </button>
+                                        <button class="btn btn-primary" id="plc1-btn-reversa">
+                                            <i class="fas fa-arrow-left"></i> Reversa
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Control de Revolvedora -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <i class="fas fa-blender"></i> Control de Revolvedora
+                            </div>
+                            <div class="card-body">
+                                <!-- Animación de revolvedora -->
+                                <div class="mixer-animation" id="mixer-animation">
+                                    <div class="mixer-blade"></div>
+                                    <div class="mixer-blade"></div>
+                                    <div class="mixer-blade"></div>
+                                </div>
+
+                                <div class="mt-3 mb-2">
+                                    <strong>Progreso:</strong>
+                                    <div class="progress mt-1">
+                                        <div id="plc2-progress"
+                                            class="progress-bar progress-bar-striped progress-bar-animated"
+                                            role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+                                            aria-valuemax="100">0%</div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-2">
+                                    <strong>Estado:</strong>
+                                    <div id="plc2-focos" class="d-flex justify-content-around my-2">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="badge bg-secondary mb-1"
+                                                id="plc2-foco-deteccion">Detección</span>
+                                            <i class="fas fa-search"></i>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="badge bg-secondary mb-1"
+                                                id="plc2-foco-trabajando">Trabajando</span>
+                                            <i class="fas fa-cog"></i>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="badge bg-secondary mb-1"
+                                                id="plc2-foco-detenido">Detenido</span>
+                                            <i class="fas fa-stop"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <strong>Control:</strong>
+                                    <div id="plc2-botones" class="d-flex justify-content-around mt-2">
+                                        <button class="btn btn-primary" id="plc2-toggle">
+                                            <i class="fas fa-pause"></i> Pausar
+                                        </button>
+                                        <button class="btn btn-primary" id="plc2-reiniciar">
+                                            <i class="fas fa-redo"></i> Reiniciar
+                                        </button>
+                                        <button class="btn btn-primary" id="plc2-skip">
+                                            <i class="fas fa-forward"></i> Skip
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Control de Empacadora Circular -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <i class="fas fa-circle-notch"></i> Control de Empacadora Circular
+                            </div>
+                            <div class="card-body">
+                                <!-- Animación de empacadora circular -->
+                                <div class="circular-packer" id="packer-animation">
+                                    <div class="packer-section"></div>
+                                    <div class="packer-section"></div>
+                                    <div class="packer-section"></div>
+                                    <div class="packer-section"></div>
+                                    <div class="packer-center"></div>
+                                </div>
+
+                                <div class="mt-3 mb-2">
+                                    <strong>Progreso:</strong>
+                                    <div class="progress mt-1">
+                                        <div id="plc3-progress"
+                                            class="progress-bar progress-bar-striped progress-bar-animated"
+                                            role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+                                            aria-valuemax="100">0%</div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-2">
+                                    <strong>Estado:</strong>
+                                    <div id="plc3-focos" class="d-flex justify-content-around my-2">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="badge bg-secondary mb-1"
+                                                id="plc3-foco-deteccion">Detección</span>
+                                            <i class="fas fa-search"></i>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="badge bg-secondary mb-1"
+                                                id="plc3-foco-trabajando">Trabajando</span>
+                                            <i class="fas fa-cog"></i>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="badge bg-secondary mb-1"
+                                                id="plc3-foco-detenido">Detenido</span>
+                                            <i class="fas fa-stop"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <strong>Control:</strong>
+                                    <div id="plc3-botones" class="d-flex justify-content-around mt-2">
+                                        <button class="btn btn-primary" id="plc3-toggle">
+                                            <i class="fas fa-pause"></i> Pausar
+                                        </button>
+                                        <button class="btn btn-primary" id="plc3-reiniciar">
+                                            <i class="fas fa-redo"></i> Reiniciar
+                                        </button>
+                                        <button class="btn btn-primary" id="plc3-skip">
+                                            <i class="fas fa-forward"></i> Skip
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Control de Robot -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-robot"></i> Control de Robot</span>
+                                <span id="robot-foco" class="badge bg-secondary">Desconocido</span>
+                            </div>
+                            <div class="card-body">
+                                <!-- Animación del robot -->
+                                <div class="robot-animation" id="robot-animation">
+                                    <div class="robot-arm">
+                                        <div class="robot-head"></div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 mb-2">
+                                    <strong>Progreso G-Code:</strong>
+                                    <div class="progress mt-1">
+                                        <div id="robot-progress"
+                                            class="progress-bar progress-bar-striped progress-bar-animated"
+                                            role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+                                            aria-valuemax="100">0%</div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-2">
+                                    <div><strong>Línea actual:</strong> <span id="robot-line"
+                                            class="badge bg-primary">0</span></div>
+                                    <div><strong>Total líneas:</strong> <span id="robot-total-lines"
+                                            class="badge bg-secondary">0</span></div>
+                                </div>
+
+                                <div>
+                                    <strong>Control:</strong>
+                                    <div id="robot-botones" class="d-flex justify-content-around mt-2">
+                                        <button class="btn btn-primary" id="robot-toggle">
+                                            <i class="fas fa-pause"></i> Pausar
+                                        </button>
+                                        <button class="btn btn-primary" id="robot-reiniciar">
+                                            <i class="fas fa-redo"></i> Reiniciar
+                                        </button>
+                                        <button class="btn btn-primary" id="robot-skip">
+                                            <i class="fas fa-forward"></i> Skip
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5: Visualización de G-Code -->
+                    <!-- Card: Log de cambios (ahora en lugar de G-Code) -->
+                    <div class="col-md-6 col-lg-8">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-clipboard-list"></i> Log de cambios</span>
+                                <button class="btn btn-sm btn-outline-light" id="clear-log">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="log-container" id="log-container">
+                                    <!-- Se agregarán elementos de log dinámicamente -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel lateral - 3 columnas -->
+            <div class="col-lg-3">
+                <!-- Card: Simbología -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-info-circle"></i> Simbología de estados
+                    </div>
+                    <div class="card-body">
+                        <div class="symbol-list">
+                            <div class="symbol-item">
+                                <div class="symbol-icon" style="background-color: #198754;"></div>
+                                <div class="symbol-text">
+                                    <strong>Verde</strong> = Trabajando / Activo
+                                </div>
+                            </div>
+                            <div class="symbol-item">
+                                <div class="symbol-icon" style="background-color: #ffc107;"></div>
+                                <div class="symbol-text">
+                                    <strong>Amarillo</strong> = Detenido / Pausado
+                                </div>
+                            </div>
+                            <div class="symbol-item">
+                                <div class="symbol-icon" style="background-color: #0dcaf0;"></div>
+                                <div class="symbol-text">
+                                    <strong>Azul</strong> = Terminado / Completado
+                                </div>
+                            </div>
+                            <div class="symbol-item">
+                                <div class="symbol-icon" style="background-color: #dc3545;"></div>
+                                <div class="symbol-text">
+                                    <strong>Rojo</strong> = Error / Alerta
+                                </div>
+                            </div>
+                            <div class="symbol-item">
+                                <div class="symbol-icon" style="background-color: #6c757d;"></div>
+                                <div class="symbol-text">
+                                    <strong>Gris</strong> = Inactivo / Apagado
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="mt-2">
+                            <div class="mb-2"><i class="fas fa-cog animate-rotating"></i> = Equipo en funcionamiento
+                            </div>
+                            <div class="mb-2"><i class="fas fa-exclamation-triangle animate-pulsing"></i> = Alerta o
+                                advertencia</div>
+                            <div><i class="fas fa-check-circle"></i> = Operación completa</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card: Estadísticas -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-bar"></i> Estadísticas
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <strong>Tiempo de operación:</strong>
+                            <div class="d-flex justify-content-between">
+                                <span>Banda:</span>
+                                <span id="op-time-plc1" class="badge bg-primary">00:00:00</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Revolvedora:</span>
+                                <span id="op-time-plc2" class="badge bg-primary">00:00:00</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Empacadora:</span>
+                                <span id="op-time-plc3" class="badge bg-primary">00:00:00</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Robot:</span>
+                                <span id="op-time-robot" class="badge bg-primary">00:00:00</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <strong>Eficiencia general:</strong>
+                            <div class="progress mt-1 mb-2">
+                                <div id="efficiency-progress" class="progress-bar bg-success" role="progressbar"
+                                    style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">85%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <!-- Archivo JavaScript principal -->
+    <script src="static/js/main.js"></script>
+    <!-- Con flask puede ser -->
+    <!-- <script src="{{ url_for('static', filename='js/main.js') }}"></script> -->
+</body>
+
+</html>

@@ -1,9 +1,9 @@
 {
     "plc1": {
-        "state": "En espera",
+        "state": "Adelante",
         "focos": {
-            "encendido": false,
-            "adelante": false,
+            "encendido": true,
+            "adelante": true,
             "reversa": false
         },
         "botones": {
@@ -16,7 +16,7 @@
         "progress": 0,
         "focos": {
             "deteccion": true,
-            "trabajando": false
+            "trabajando": true
         },
         "botones": {
             "toggle": false,
@@ -28,7 +28,7 @@
         "progress": 0,
         "focos": {
             "deteccion": true,
-            "trabajando": false
+            "trabajando": true
         },
         "botones": {
             "toggle": false,
@@ -39,9 +39,9 @@
     "robot": {
         "gcode_line": 0,
         "total_lines": 100,
-        "foco": "detenido",
+        "foco": "trabajando",
         "botones": {
-            "toggle": false,
+            "toggle": true,
             "reiniciar": false,
             "skip": false
         }
@@ -57,6 +57,52 @@
         "Revolvedora: Trabajo iniciado",
         "Revolvedora: Trabajo pausado",
         "PLC1: Encendido activado",
-        "PLC1: Encendido desactivado"
+        "PLC1: Encendido desactivado",
+        "PLC1: Encendido activado",
+        "PLC1: Dirección puesta a Adelante",
+        "Revolvedora: Trabajo iniciado",
+        "Empacadora: Trabajo iniciado",
+        "Robot: Iniciando trabajo",
+        "Empacadora: Trabajo pausado",
+        "Empacadora: Trabajo iniciado",
+        "PLC1: Encendido desactivado",
+        "PLC1: Encendido activado",
+        "Empacadora: Trabajo pausado",
+        "Empacadora: Trabajo iniciado",
+        "Empacadora: Trabajo pausado",
+        "Revolvedora: Trabajo pausado",
+        "Robot: Detenido",
+        "Robot: Proceso reiniciado",
+        "Robot: Proceso reiniciado",
+        "Revolvedora: Proceso reiniciado",
+        "Empacadora: Trabajo iniciado",
+        "Empacadora: Proceso completado (skip)",
+        "Revolvedora: Proceso completado (skip)",
+        "Revolvedora: Proceso reiniciado",
+        "Empacadora: Proceso reiniciado",
+        "PLC1: Encendido desactivado",
+        "PLC1: Encendido activado",
+        "PLC1: Dirección puesta a Adelante",
+        "PLC1: Dirección puesta a Reversa",
+        "Robot: Iniciando trabajo",
+        "Revolvedora: Trabajo iniciado",
+        "Revolvedora: Trabajo pausado",
+        "Revolvedora: Trabajo iniciado",
+        "Empacadora: Trabajo pausado",
+        "Empacadora: Trabajo iniciado",
+        "PLC1: Encendido desactivado",
+        "Robot: Detenido",
+        "PLC1: Encendido activado",
+        "Robot: Iniciando trabajo",
+        "PLC1: Encendido desactivado",
+        "PLC1: Encendido activado",
+        "PLC1: Dirección puesta a Adelante",
+        "PLC1: Encendido desactivado",
+        "PLC1: Encendido activado",
+        "PLC1: Dirección puesta a Adelante",
+        "PLC1: Dirección Adelante desactivada",
+        "PLC1: Encendido desactivado",
+        "PLC1: Encendido activado",
+        "PLC1: Dirección puesta a Adelante"
     ]
 }

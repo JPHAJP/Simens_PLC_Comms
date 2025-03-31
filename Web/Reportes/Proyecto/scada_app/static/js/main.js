@@ -54,11 +54,12 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // Elementos de animación
+    const logContainer = document.getElementById('log-container');
+    const conveyorAnimation = document.getElementById('conveyor-animation');
     const conveyorBelt = document.getElementById('conveyor-belt');
-    const mixerAnimation = document.getElementById('mixer-animation');
+    const pistonAnimation = document.getElementById('piston-animation');
     const packerAnimation = document.getElementById('packer-animation');
     const robotAnimation = document.getElementById('robot-animation');
-    const logContainer = document.getElementById('log-container');
 
     // Contadores para tiempos de operación
     let timerIntervals = {};
@@ -130,6 +131,49 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Función para activar la banda transportadora
+    function startConveyor(direction = 'forward') {
+        const conveyorBelt = document.getElementById('conveyor-belt');
+        conveyorBelt.classList.remove('conveyor-belt-forward', 'conveyor-belt-reverse');
+
+        if (direction === 'forward') {
+            conveyorBelt.classList.add('conveyor-belt-forward');
+        } else {
+            conveyorBelt.classList.add('conveyor-belt-reverse');
+        }
+    }
+
+    // Función para detener la banda transportadora
+    function stopConveyor() {
+        const conveyorBelt = document.getElementById('conveyor-belt');
+        conveyorBelt.classList.remove('conveyor-belt-forward', 'conveyor-belt-reverse');
+    }
+
+    // Función para activar los pistones
+    function startPistons() {
+        const pistonAnimation = document.getElementById('piston-animation');
+        pistonAnimation.classList.add('piston-active');
+    }
+
+    // Función para detener los pistones
+    function stopPistons() {
+        const pistonAnimation = document.getElementById('piston-animation');
+        pistonAnimation.classList.remove('piston-active');
+    }
+
+    // Función para activar la empacadora
+    function startPacker() {
+        const packerAnimation = document.getElementById('packer-animation');
+        packerAnimation.classList.add('packer-active');
+    }
+
+    // Función para detener la empacadora
+    function stopPacker() {
+        const packerAnimation = document.getElementById('packer-animation');
+        packerAnimation.classList.remove('packer-active');
+    }
+
+
     // Función para actualizar la interfaz
     function updateUI(data) {
         // -------- Actualizar PLC1 --------
@@ -165,12 +209,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // Detectar cambios reales en PLC1
         if (plc1Encendido !== previousState.plc1.encendido) {
             if (plc1Encendido) {
-                conveyorBelt.style.display = 'block';
-                conveyorBelt.classList.add('conveyor-belt');
+                startConveyor(); // Función nueva
                 addLogEntry('Banda transportadora: Encendida', 'info');
             } else {
-                conveyorBelt.style.display = 'none';
-                conveyorBelt.classList.remove('conveyor-belt', 'conveyor-belt-forward', 'conveyor-belt-reverse');
+                stopConveyor(); // Función nueva
                 addLogEntry('Banda transportadora: Apagada', 'warning');
             }
             previousState.plc1.encendido = plc1Encendido;
@@ -179,11 +221,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (plc1Encendido) {
             if (plc1Adelante !== previousState.plc1.adelante) {
                 if (plc1Adelante) {
-                    conveyorBelt.classList.remove('conveyor-belt-reverse');
-                    conveyorBelt.classList.add('conveyor-belt-forward');
+                    startConveyor('forward'); // Función nueva con parámetro
                     addLogEntry('Banda transportadora: Iniciando movimiento adelante', 'info');
                 } else if (previousState.plc1.adelante) {
-                    conveyorBelt.classList.remove('conveyor-belt-forward');
+                    stopConveyor(); // Función nueva
                     addLogEntry('Banda transportadora: Detenido movimiento adelante', 'warning');
                 }
                 previousState.plc1.adelante = plc1Adelante;
@@ -191,11 +232,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (plc1Reversa !== previousState.plc1.reversa) {
                 if (plc1Reversa) {
-                    conveyorBelt.classList.remove('conveyor-belt-forward');
-                    conveyorBelt.classList.add('conveyor-belt-reverse');
+                    startConveyor('reverse'); // Función nueva con parámetro
                     addLogEntry('Banda transportadora: Iniciando movimiento en reversa', 'info');
                 } else if (previousState.plc1.reversa) {
-                    conveyorBelt.classList.remove('conveyor-belt-reverse');
+                    stopConveyor(); // Función nueva
                     addLogEntry('Banda transportadora: Detenido movimiento en reversa', 'warning');
                 }
                 previousState.plc1.reversa = plc1Reversa;
@@ -245,26 +285,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         // Detectar cambios reales en PLC2
-        if (plc2Deteccion !== previousState.plc2.deteccion) {
-            if (plc2Deteccion) {
-                addLogEntry('Revolvedora: Detectando material', 'info');
-            } else {
-                addLogEntry('Revolvedora: No detecta material', 'warning');
-            }
-            previousState.plc2.deteccion = plc2Deteccion;
-        }
-
         if (plc2Trabajando !== previousState.plc2.trabajando) {
             if (plc2Trabajando) {
-                addLogEntry('Revolvedora: Iniciando trabajo', 'info');
-                mixerAnimation.classList.add('mixer-active');
+                addLogEntry('Pistones: Iniciando trabajo', 'info');
+                startPistons(); // Función nueva
             } else {
-                addLogEntry('Revolvedora: Deteniendo trabajo', 'warning');
-                mixerAnimation.classList.remove('mixer-active');
+                addLogEntry('Pistones: Deteniendo trabajo', 'warning');
+                stopPistons(); // Función nueva
             }
             previousState.plc2.trabajando = plc2Trabajando;
         }
-
         toggleOperationTimer('plc2', plc2Trabajando);
 
         // -------- Actualizar PLC3 (Empacadora Circular) --------
@@ -305,26 +335,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         // Detectar cambios reales en PLC3
-        if (plc3Deteccion !== previousState.plc3.deteccion) {
-            if (plc3Deteccion) {
-                addLogEntry('Empacadora: Detectando producto', 'info');
-            } else {
-                addLogEntry('Empacadora: No detecta producto', 'warning');
-            }
-            previousState.plc3.deteccion = plc3Deteccion;
-        }
-
         if (plc3Trabajando !== previousState.plc3.trabajando) {
             if (plc3Trabajando) {
                 addLogEntry('Empacadora: Iniciando trabajo', 'info');
-                packerAnimation.classList.add('packer-active');
+                startPacker(); // Función nueva
             } else {
                 addLogEntry('Empacadora: Deteniendo trabajo', 'warning');
-                packerAnimation.classList.remove('packer-active');
+                stopPacker(); // Función nueva
             }
             previousState.plc3.trabajando = plc3Trabajando;
         }
-
         toggleOperationTimer('plc3', plc3Trabajando);
 
         // -------- Actualizar Robot --------
@@ -505,29 +525,29 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('plc2-toggle').addEventListener('click', function () {
         // Desactivar el botón temporalmente para evitar múltiples clics
         this.disabled = true;
-        
+
         // Determinar el nuevo estado que queremos
         const currentState = previousState.plc2.botones.toggle;
         const newState = !currentState;
-        
+
         // Log de la acción
         addLogEntry(`Comando: ${newState ? 'Activar' : 'Pausar'} revolvedora`, 'info');
-        
+
         fetch('/api/plc2/button', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'toggle', newState: newState })
         })
-        .then(response => response.json())
-        .then(data => {
-            updateUI(data);
-            this.disabled = false;
-        })
-        .catch(error => {
-            console.error('Error en acción toggle PLC2:', error);
-            addLogEntry('Error al enviar comando a revolvedora', 'error');
-            this.disabled = false;
-        });
+            .then(response => response.json())
+            .then(data => {
+                updateUI(data);
+                this.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error en acción toggle PLC2:', error);
+                addLogEntry('Error al enviar comando a revolvedora', 'error');
+                this.disabled = false;
+            });
     });
 
     document.getElementById('plc2-reiniciar').addEventListener('click', function () {

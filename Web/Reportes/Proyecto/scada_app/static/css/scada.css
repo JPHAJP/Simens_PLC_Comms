@@ -90,172 +90,627 @@ body {
     animation: pulse 1.5s ease-in-out infinite;
 }
 
-/* ======= Banda transportadora ======= */
+/* ======= Banda transportadora mejorada con cajas ======= */
 .conveyor-animation {
     position: relative;
-    height: 40px;
+    height: 60px;
     overflow: hidden;
-    background-color: #e9ecef;
-    border-radius: 5px;
+    background-color: #2c3e50;
+    border-radius: 3px;
     margin: 10px 0;
+    border: 1px solid #34495e;
 }
 
 .conveyor-belt {
     position: absolute;
     width: 200%;
     height: 100%;
-    background: repeating-linear-gradient(45deg, #adb5bd, #adb5bd 10px, #6c757d 10px, #6c757d 20px);
+    background: repeating-linear-gradient(90deg, #2c3e50, #2c3e50 15px, #34495e 15px, #34495e 30px);
+    left: 0; /* Aseguramos que comience desde la izquierda */
 }
 
-/* Animaciones para movimiento de la banda */
+/* Animaciones para movimiento de la banda - mejoradas para ciclo continuo */
 .conveyor-belt-forward {
-    animation: moveLeft 10s linear infinite;
+    animation: moveConveyor 10s linear infinite;
 }
 
 .conveyor-belt-reverse {
-    animation: moveLeft 10s linear reverse infinite;
+    animation: moveConveyor 10s linear infinite reverse;
 }
 
-/* ======= Revolvedora ======= */
-.mixer-animation {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto;
-    border: 5px solid #6c757d;
-    border-radius: 50%;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+@keyframes moveConveyor {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* Solo movemos la mitad para un ciclo perfecto */
 }
 
-.mixer-blade {
+/* Cajas para la banda transportadora - sincronizadas con la banda */
+.conveyor-box {
     position: absolute;
-    width: 5px;
-    height: 40px;
-    background-color: #343a40;
+    width: 40px;
+    height: 30px;
+    background-color: #c0392b;
+    border: 1px solid #922b21;
+    top: 15px;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-.mixer-blade:nth-child(2) {
-    transform: rotate(60deg);
+/* Posicionamos las cajas equidistantes y les damos la misma animación que la banda */
+.conveyor-box:nth-child(2) {
+    left: 20%;
 }
 
-.mixer-blade:nth-child(3) {
-    transform: rotate(120deg);
+.conveyor-box:nth-child(3) {
+    left: 50%;
 }
 
-/* Cuando esté activo, se aplica la animación de rotación */
-.mixer-active .mixer-blade {
-    animation: rotate 2s linear infinite;
+.conveyor-box:nth-child(4) {
+    left: 80%;
 }
 
-/* ======= Empacadora Circular ======= */
-.circular-packer {
-    width: 80px;
-    height: 80px;
+/* Cuando la banda va hacia adelante, las cajas también */
+.conveyor-belt-forward ~ .conveyor-box {
+    animation: moveConveyor 10s linear infinite;
+}
+
+/* Cuando la banda va hacia atrás, las cajas también */
+.conveyor-belt-reverse ~ .conveyor-box {
+    animation: moveConveyor 10s linear infinite reverse;
+}
+
+/* ======= Pistones en V invertidos con turno para aplastar ======= */
+.piston-animation {
+    width: 120px;
+    height: 100px;
     margin: 0 auto;
-    border: 3px solid #6c757d;
+    position: relative;
+    border: 1px solid #7f8c8d;
+    background-color: transparent;
+    border-radius: 3px;
+}
+
+.piston-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+}
+
+/* Pistón izquierdo */
+.piston-left {
+    position: absolute;
+    left: 10px;
+    top: 20px;
+    width: 35px;
+    height: 12px;
+    background-color: #95a5a6;
+    border: 1px solid #7f8c8d;
+    border-radius: 5px;
+    transform: rotate(-30deg);
+    transform-origin: left center;
+}
+
+.piston-left .piston-arm {
+    position: absolute;
+    width: 4px;
+    height: 40px;
+    background-color: #7f8c8d;
+    top: 6px;
+    right: 3px;
+    transform-origin: top center;
+}
+
+.piston-left .piston-head {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #95a5a6;
+    border: 1px solid #7f8c8d;
+    border-radius: 3px;
+    right: -4px;
+    bottom: -40px;
+}
+
+/* Pistón derecho */
+.piston-right {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    width: 35px;
+    height: 12px;
+    background-color: #95a5a6;
+    border: 1px solid #7f8c8d;
+    border-radius: 5px;
+    transform: rotate(30deg);
+    transform-origin: right center;
+}
+
+.piston-right .piston-arm {
+    position: absolute;
+    width: 4px;
+    height: 40px;
+    background-color: #7f8c8d;
+    top: 6px;
+    left: 3px;
+    transform-origin: top center;
+}
+
+.piston-right .piston-head {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #95a5a6;
+    border: 1px solid #7f8c8d;
+    border-radius: 3px;
+    left: -4px;
+    bottom: -40px;
+}
+
+/* Caja roja a aplastar - en el punto más bajo de la V */
+.crush-object {
+    position: absolute;
+    width: 20px;
+    height: 15px;
+    background-color: #e74c3c;
+    left: 50px;
+    bottom: 10px;
+    border-radius: 2px;
+    border: 1px solid #c0392b;
+}
+
+/* Animación de los pistones - alternados */
+.piston-active .piston-left .piston-arm {
+    animation: pistonLeftArmExtend 3s ease-in-out infinite;
+}
+
+.piston-active .piston-right .piston-arm {
+    animation: pistonRightArmExtend 3s ease-in-out infinite;
+}
+
+.piston-active .piston-left .piston-head {
+    animation: pistonLeftHeadMove 3s ease-in-out infinite;
+}
+
+.piston-active .piston-right .piston-head {
+    animation: pistonRightHeadMove 3s ease-in-out infinite;
+}
+
+.piston-active .crush-object {
+    animation: objectCrushed 3s ease-in-out infinite;
+}
+
+@keyframes pistonLeftArmExtend {
+    0%, 33%, 66%, 100% { height: 40px; }
+    16%, 50% { height: 70px; }
+}
+
+@keyframes pistonRightArmExtend {
+    0%, 33%, 66%, 100% { height: 40px; }
+    50%, 83% { height: 70px; }
+}
+
+@keyframes pistonLeftHeadMove {
+    0%, 33%, 66%, 100% { bottom: -40px; }
+    16%, 50% { bottom: -70px; }
+}
+
+@keyframes pistonRightHeadMove {
+    0%, 33%, 66%, 100% { bottom: -40px; }
+    50%, 83% { bottom: -70px; }
+}
+
+@keyframes objectCrushed {
+    0%, 33%, 66%, 100% { height: 15px; transform: scaleX(1); }
+    16%, 50% { height: 8px; transform: scaleX(1.2); left: 48px; }
+    50%, 83% { height: 8px; transform: scaleX(1.2); left: 52px; }
+}
+
+/* ======= Empacadora circular mejorada con emplaye y sensor ======= */
+.circular-packer {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    border: 3px solid #34495e;
     border-radius: 50%;
     position: relative;
     overflow: hidden;
+    background-color: transparent;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
 }
 
-.packer-section {
+/* Caja roja central para emplayar - centrada correctamente */
+.packer-product {
     position: absolute;
-    width: 50%;
-    height: 50%;
-    transform-origin: bottom right;
+    width: 30px;
+    height: 30px;
+    background-color: #e74c3c;
+    border: 1px solid #c0392b;
+    left: calc(50% - 15px);
+    top: calc(50% - 15px);
+    z-index: 1;
 }
 
-.packer-section:nth-child(1) {
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 123, 255, 0.5);
-}
-
-.packer-section:nth-child(2) {
-    top: 0;
-    right: 0;
-    background-color: rgba(40, 167, 69, 0.5);
-}
-
-.packer-section:nth-child(3) {
-    bottom: 0;
-    right: 0;
-    background-color: rgba(255, 193, 7, 0.5);
-}
-
-.packer-section:nth-child(4) {
-    bottom: 0;
-    left: 0;
-    background-color: rgba(220, 53, 69, 0.5);
-}
-
+/* Base del motor */
 .packer-center {
     position: absolute;
-    width: 30%;
-    height: 30%;
-    top: 35%;
-    left: 35%;
-    background-color: #6c757d;
+    width: 20px;
+    height: 20px;
+    top: calc(50% - 10px);
+    left: calc(50% - 10px);
+    background-color: #2c3e50;
     border-radius: 50%;
+    z-index: 3;
 }
 
-/* Animación de rotación para la empacadora */
-.packer-active {
-    animation: rotatePacker 3s linear infinite;
+/* Brazo que sostiene el plástico */
+.packer-arm {
+    position: absolute;
+    width: 50px;
+    height: 3px;
+    background-color: #7f8c8d;
+    left: calc(50%);
+    top: calc(50%);
+    transform-origin: 0% 50%;
+    z-index: 2;
 }
 
-@keyframes rotatePacker {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+/* Rollo de plástico en el extremo del brazo */
+.packer-nozzle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #bdc3c7;
+    border: 1px solid #95a5a6;
+    border-radius: 50%;
+    right: -4px;
+    top: -3px;
 }
 
-/* Pulso para el centro cuando esté activo */
-.packer-active .packer-center {
-    animation: pulse 1s ease-in-out infinite;
+/* Indicador de funcionamiento - ahora centrado correctamente */
+.packer-indicator {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: #27ae60;
+    border-radius: 50%;
+    top: calc(50% - 3px);
+    left: calc(50% - 3px);
+    z-index: 4;
+}
+
+/* Sensor de conteo en la parte derecha */
+.packer-sensor {
+    position: absolute;
+    width: 8px;
+    height: 12px;
+    background-color: #95a5a6;
+    border: 1px solid #7f8c8d;
+    right: 5px;
+    top: calc(50% - 6px);
+    z-index: 3;
+}
+
+/* Contador de vueltas */
+.packer-counter {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: #2c3e50;
+    border-radius: 3px;
+    right: -20px;
+    top: calc(50% - 8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 5;
+}
+
+/* Capas de plástico que se van acumulando - ajustadas para centrarse correctamente */
+.layer-1, .layer-2, .layer-3, .layer-4, .layer-5 {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    left: calc(50% - 17px);
+    top: calc(50% - 17px);
+    background-color: rgba(200, 200, 200, 0);
+    border-radius: 1px;
+    z-index: 2;
+    opacity: 0;
+}
+
+/* Animación para la empacadora */
+.packer-active .packer-arm {
+    animation: packArmRotate 5s linear infinite;
+}
+
+.packer-active .packer-indicator {
+    animation: blink 1s ease-in-out infinite;
+}
+
+/* Animación por capas que oscurecen gradualmente la caja */
+.packer-active .layer-1 {
+    animation: layer1Fill 5s linear infinite;
+}
+
+.packer-active .layer-2 {
+    animation: layer2Fill 5s linear infinite;
+}
+
+.packer-active .layer-3 {
+    animation: layer3Fill 5s linear infinite;
+}
+
+.packer-active .layer-4 {
+    animation: layer4Fill 5s linear infinite;
+}
+
+.packer-active .layer-5 {
+    animation: layer5Fill 5s linear infinite;
+}
+
+/* Animación para el sensor */
+.packer-active .packer-sensor {
+    animation: sensorActivate 5s linear infinite;
+}
+
+/* Animación para el contador */
+.packer-active .packer-counter {
+    animation: counterCount 25s steps(5, end) infinite;
+}
+
+@keyframes packArmRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Cada capa aumenta gradualmente la opacidad y el tono gris */
+@keyframes layer1Fill {
+    0% { opacity: 0; background-color: rgba(200, 200, 200, 0); }
+    10% { opacity: 0.2; background-color: rgba(150, 150, 150, 0.15); }
+    100% { opacity: 0.2; background-color: rgba(150, 150, 150, 0.15); }
+}
+
+@keyframes layer2Fill {
+    0%, 20% { opacity: 0; background-color: rgba(200, 200, 200, 0); }
+    30% { opacity: 0.4; background-color: rgba(140, 140, 140, 0.3); }
+    100% { opacity: 0.4; background-color: rgba(140, 140, 140, 0.3); }
+}
+
+@keyframes layer3Fill {
+    0%, 40% { opacity: 0; background-color: rgba(200, 200, 200, 0); }
+    50% { opacity: 0.6; background-color: rgba(130, 130, 130, 0.45); }
+    100% { opacity: 0.6; background-color: rgba(130, 130, 130, 0.45); }
+}
+
+@keyframes layer4Fill {
+    0%, 60% { opacity: 0; background-color: rgba(200, 200, 200, 0); }
+    70% { opacity: 0.8; background-color: rgba(120, 120, 120, 0.6); }
+    100% { opacity: 0.8; background-color: rgba(120, 120, 120, 0.6); }
+}
+
+@keyframes layer5Fill {
+    0%, 80% { opacity: 0; background-color: rgba(200, 200, 200, 0); }
+    90% { opacity: 1; background-color: rgba(100, 100, 100, 0.75); }
+    100% { opacity: 0; background-color: rgba(100, 100, 100, 0); }
+}
+
+/* Animación del sensor que cambia a amarillo cuando el brazo pasa */
+@keyframes sensorActivate {
+    0%, 89%, 100% { background-color: #95a5a6; }
+    90%, 95% { background-color: #f1c40f; }
+}
+
+/* Animación para el contador que aumenta con cada vuelta */
+@keyframes counterCount {
+    0% { content: '1'; }
+    20% { content: '2'; }
+    40% { content: '3'; }
+    60% { content: '4'; }
+    80% { content: '5'; }
+    100% { content: '1'; }
+}
+
+/* Contador utilizando atributo data-count y pseudo-elemento para mostrar el número */
+.packer-counter::before {
+    content: '0';
+}
+
+.packer-active .packer-counter::before {
+    animation: changeCounter 25s steps(5, end) infinite;
+}
+
+@keyframes changeCounter {
+    0% { content: '1'; }
+    20% { content: '2'; }
+    40% { content: '3'; }
+    60% { content: '4'; }
+    80% { content: '5'; }
+    100% { content: '1'; }
 }
 
 /* ======= Robot ======= */
 .robot-animation {
     position: relative;
     width: 100%;
-    height: 100px;
+    height: 120px;
     border: 1px solid #ddd;
     background-color: #f8f9fa;
     border-radius: 5px;
     overflow: hidden;
 }
 
-.robot-arm {
+/* Superficie de trabajo */
+.robot-animation::before {
+    content: '';
     position: absolute;
     bottom: 0;
-    left: 50%;
-    width: 10px;
-    height: 60px;
-    background-color: #6c757d;
-    transform-origin: bottom center;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(to right, #e9ecef 0%, #dee2e6 100%);
+    border-top: 2px solid #ced4da;
+    z-index: 1;
 }
 
+/* Líneas de la cuadrícula */
+.robot-animation::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    background-image: 
+        linear-gradient(to right, rgba(222, 226, 230, 0.3) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(222, 226, 230, 0.3) 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: 0;
+}
+
+/* Base del robot */
+.robot-arm {
+    position: absolute;
+    bottom: 30px;
+    left: 30%;
+    width: 20px;
+    height: 40px;
+    background: linear-gradient(to bottom, #495057, #343a40);
+    border-radius: 3px;
+    z-index: 3;
+}
+
+/* Borde superior de la base */
+.robot-arm::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 28px;
+    height: 8px;
+    background-color: #495057;
+    border-radius: 4px;
+    z-index: 3;
+}
+
+/* Brazo robótico */
 .robot-head {
     position: absolute;
+    top: 0;
+    left: 10px;
+    width: 50px;
+    height: 10px;
+    background-color: #007bff;
+    border-radius: 5px;
+    transform-origin: left center;
+    transform: rotate(-30deg);
+    z-index: 4;
+}
+
+/* Articulación del brazo */
+.robot-head::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: -5px;
     width: 20px;
     height: 20px;
+    background: radial-gradient(circle, #007bff 30%, #0056b3 100%);
+    border-radius: 50%;
+    z-index: 5;
+}
+
+/* Herramienta/cabezal */
+.robot-head::after {
+    content: '';
+    position: absolute;
+    right: -15px;
+    top: -10px;
+    width: 25px;
+    height: 30px;
     background-color: #343a40;
+    clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+    z-index: 6;
+}
+
+/* Pieza que está siendo procesada */
+.robot-animation .workpiece {
+    position: absolute;
+    bottom: 30px;
+    left: 55%;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #e9ecef 0%, #adb5bd 100%);
     border-radius: 3px;
+    z-index: 2;
 }
 
 /* Animación para el robot cuando está trabajando */
-.robot-working .robot-arm {
-    animation: robot-movement 4s ease-in-out infinite;
+.robot-working .robot-head {
+    animation: robotArm 5s ease-in-out infinite;
 }
 
-@keyframes robot-movement {
-    0% { transform: rotate(-30deg); }
-    25% { transform: rotate(30deg); }
-    50% { transform: rotate(-10deg); }
-    75% { transform: rotate(10deg); }
-    100% { transform: rotate(-30deg); }
+.robot-working .robot-head::after {
+    animation: toolMovement 5s ease-in-out infinite;
+}
+
+.robot-working .workpiece {
+    animation: pieceProcessing 5s ease-in-out infinite;
+}
+
+/* Animación del brazo robótico */
+@keyframes robotArm {
+    0% {
+        transform: rotate(-30deg);
+    }
+    25% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(30deg);
+    }
+    75% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(-30deg);
+    }
+}
+
+/* Animación de la herramienta */
+@keyframes toolMovement {
+    0% {
+        background-color: #343a40;
+    }
+    25%, 75% {
+        background-color: #dc3545;
+    }
+    50% {
+        background-color: #ffc107;
+    }
+    100% {
+        background-color: #343a40;
+    }
+}
+
+/* Animación de la pieza procesada */
+@keyframes pieceProcessing {
+    0%, 100% {
+        box-shadow: none;
+    }
+    25%, 75% {
+        box-shadow: 0 0 10px rgba(220, 53, 69, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(255, 193, 7, 0.8);
+    }
 }
 
 /* ======= Estilos para Progress Bars ======= */

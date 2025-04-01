@@ -7,7 +7,7 @@ import base64
 import logging
 
 app = Flask(__name__)
-DB_FILE = 'db.json'
+DB_FILE = 'Web/Reportes/Proyecto/scada_app/db.json'
 app.secret_key = 'ibhv98iurbiubvireb56548956+89'
 
 # Configuración básica de logging

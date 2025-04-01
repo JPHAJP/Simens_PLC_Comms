@@ -3,7 +3,7 @@ import json
 from opcua import Client  # Asegúrate de tener instalada la biblioteca python-opcua
 
 app = Flask(__name__)
-DB_FILE = 'db.json'
+DB_FILE = 'Web/Reportes/Teoria/T6/assets/simple_scada/db.json'
 # Configura aquí el endpoint OPC (ajusta la IP y puerto según tu entorno)
 OPC_ENDPOINT = "opc.tcp://localhost:4840"
 

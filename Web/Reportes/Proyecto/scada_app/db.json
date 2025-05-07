@@ -1,9 +1,9 @@
 {
     "plc1": {
-        "state": "Adelante",
+        "state": "En espera",
         "focos": {
             "encendido": false,
-            "adelante": true,
+            "adelante": false,
             "reversa": false
         },
         "botones": {
@@ -13,7 +13,7 @@
         }
     },
     "plc2": {
-        "progress": 0,
+        "progress": 100,
         "focos": {
             "deteccion": false,
             "trabajando": false
@@ -25,7 +25,7 @@
         }
     },
     "plc3": {
-        "progress": 0,
+        "progress": 100,
         "focos": {
             "deteccion": false,
             "trabajando": false
@@ -52,43 +52,6 @@
         "azul": "terminado"
     },
     "log": [
-        "Empacadora: Trabajo pausado",
-        "PLC1: Activado encendido",
-        "PLC1: Modo establecido a Apagado",
-        "PLC1: Desactivado encendido",
-        "PLC1: Modo establecido a Apagado",
-        "PLC1: Activado encendido",
-        "PLC1: Modo establecido a Apagado",
-        "PLC1: Modo establecido a Adelante",
-        "PLC1: Modo establecido a Reversa",
-        "PLC1: Modo establecido a Adelante",
-        "PLC1: Modo establecido a Reversa",
-        "PLC1: Activado encendido",
-        "PLC1: Modo establecido a Apagado",
-        "PLC1: Modo establecido a Adelante",
-        "PLC1: Modo establecido a Reversa",
-        "PLC1: Modo establecido a Adelante",
-        "PLC1: Modo establecido a Reversa",
-        "PLC1: Desactivado encendido",
-        "PLC1: Modo establecido a Apagado",
-        "PLC1: Desactivado encendido",
-        "PLC1: Modo establecido a Apagado",
-        "PLC1: Activado encendido",
-        "PLC1: Modo establecido a Apagado",
-        "PLC1: Modo establecido a Adelante",
-        "PLC1: Desactivado encendido",
-        "PLC1: Modo establecido a Apagado",
-        "PLC1: Activado encendido",
-        "PLC1: Modo establecido a Apagado",
-        "PLC1: Modo establecido a Adelante",
-        "PLC1: Modo establecido a Reversa",
-        "PLC1: Modo establecido a Adelante",
-        "PLC1: Activado encendido",
-        "PLC1: Modo establecido a Adelante",
-        "PLC1: Desactivado encendido",
-        "PLC1: Modo establecido a Apagado",
-        "PLC1: Activado encendido",
-        "PLC1: Modo establecido a Apagado",
-        "PLC1: Modo establecido a Adelante"
+        "Empacadora: Trabajo pausado"
     ]
 }

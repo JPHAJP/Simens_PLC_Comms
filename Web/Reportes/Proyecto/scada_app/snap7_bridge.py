@@ -5,6 +5,7 @@ import logging
 import time
 import threading
 import os
+import shutil
 
 # Configuración de logging
 logging.basicConfig(
@@ -20,6 +21,7 @@ logger = logging.getLogger("snap7_bridge")
 
 # Ruta al archivo DB JSON
 DB_FILE = 'Web/Reportes/Proyecto/scada_app/db.json'
+DB_BACKUP = 'Web/Reportes/Proyecto/scada_app/db.json.bak'
 
 # Definición de PLCs
 PLCS = [
@@ -63,43 +65,93 @@ plc_clients = {}
 # Semáforo para sincronizar acceso al archivo JSON
 json_lock = threading.Lock()
 
+def get_default_data():
+    """Devuelve la estructura de datos por defecto"""
+    return {
+        "plc1": {
+            "state": "En espera",
+            "focos": {"encendido": False, "adelante": False, "reversa": False}
+        },
+        "plc2": {
+            "progress": 0,
+            "focos": {"deteccion": False, "trabajando": False}
+        },
+        "plc3": {
+            "progress": 0,
+            "focos": {"deteccion": False, "trabajando": False}
+        },
+        "log": []
+    }
+
 def read_db_json():
-    """Lee los datos del archivo JSON"""
+    """Lee los datos del archivo JSON con manejo de errores mejorado"""
     with json_lock:
         try:
             if os.path.exists(DB_FILE):
-                with open(DB_FILE, 'r', encoding='utf-8') as f:
-                    return json.load(f)
+                try:
+                    with open(DB_FILE, 'r', encoding='utf-8') as f:
+                        content = f.read().strip()
+                        # Verificar si el JSON es válido
+                        data = json.loads(content)
+                        
+                        # Verificar que la estructura es correcta
+                        for key in ["plc1", "plc2", "plc3", "log"]:
+                            if key not in data:
+                                logger.warning(f"Estructura JSON incorrecta: falta clave '{key}'. Restaurando estructura predeterminada.")
+                                raise ValueError("Estructura JSON incorrecta")
+                                
+                        return data
+                except (json.JSONDecodeError, ValueError) as e:
+                    logger.error(f"Error en formato JSON: {e}. Restaurando desde backup o creando nuevo.")
+                    # Intentar restaurar desde backup
+                    if os.path.exists(DB_BACKUP):
+                        logger.info("Restaurando desde archivo de backup.")
+                        try:
+                            with open(DB_BACKUP, 'r', encoding='utf-8') as f:
+                                return json.load(f)
+                        except:
+                            logger.error("Backup también corrupto. Creando nuevo archivo.")
+                    
+                    # Si no hay backup o también está corrupto, crear nuevo
+                    default_data = get_default_data()
+                    write_db_json(default_data)
+                    return default_data
             else:
                 # Crear estructura básica si no existe
-                default_data = {
-                    "plc1": {
-                        "state": "En espera",
-                        "focos": {"encendido": False, "adelante": False, "reversa": False}
-                    },
-                    "plc2": {
-                        "progress": 0,
-                        "focos": {"deteccion": False, "trabajando": False}
-                    },
-                    "plc3": {
-                        "progress": 0,
-                        "focos": {"deteccion": False, "trabajando": False}
-                    },
-                    "log": []
-                }
+                default_data = get_default_data()
                 write_db_json(default_data)
                 return default_data
         except Exception as e:
-            logger.error(f"Error al leer JSON: {e}")
-            return {}
+            logger.error(f"Error inesperado al leer JSON: {e}")
+            return get_default_data()
 
 def write_db_json(data):
-    """Escribe los datos al archivo JSON"""
+    """Escribe los datos al archivo JSON con respaldo"""
     with json_lock:
         try:
             os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
-            with open(DB_FILE, 'w', encoding='utf-8') as f:
+            
+            # Verificar que la estructura es correcta antes de escribir
+            for key in ["plc1", "plc2", "plc3", "log"]:
+                if key not in data:
+                    logger.warning(f"Intentando escribir JSON sin la clave '{key}'. Corrigiendo.")
+                    data[key] = get_default_data()[key]
+            
+            # Si existe, primero hacemos una copia de seguridad del archivo actual
+            if os.path.exists(DB_FILE):
+                try:
+                    shutil.copy2(DB_FILE, DB_BACKUP)
+                except Exception as e:
+                    logger.error(f"Error al crear backup: {e}")
+            
+            # Escribir a un archivo temporal primero
+            temp_file = f"{DB_FILE}.tmp"
+            with open(temp_file, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=4)
+            
+            # Luego renombrar el archivo temporal (operación atómica)
+            os.replace(temp_file, DB_FILE)
+            
         except Exception as e:
             logger.error(f"Error al escribir JSON: {e}")
 
@@ -164,6 +216,11 @@ def read_plc_data(plc_name):
         # PLC específico - determinar qué clave usar (plc1, plc2, plc3)
         json_key = plc_name.lower()
         
+        # Asegurarse de que la clave exista
+        if json_key not in data:
+            logger.warning(f"Clave {json_key} no encontrada en datos JSON. Inicializando.")
+            data[json_key] = get_default_data()[json_key]
+        
         # Leer variables
         for var_name, var_config in mapping["variables"].items():
             var_type = var_config["type"]
@@ -178,6 +235,8 @@ def read_plc_data(plc_name):
                 # Actualizar JSON según la variable
                 if plc_name == "PLC1":
                     if var_name == "encendido":
+                        if "focos" not in data[json_key]:
+                            data[json_key]["focos"] = {"encendido": False, "adelante": False, "reversa": False}
                         data[json_key]["focos"]["encendido"] = value
                         if value:
                             data[json_key]["state"] = "Encendido"
@@ -186,11 +245,15 @@ def read_plc_data(plc_name):
                             data[json_key]["focos"]["adelante"] = False
                             data[json_key]["focos"]["reversa"] = False
                 elif plc_name == "PLC2":
+                    if "focos" not in data[json_key]:
+                        data[json_key]["focos"] = {"deteccion": False, "trabajando": False}
                     if var_name == "deteccion":
                         data[json_key]["focos"]["deteccion"] = value
                     elif var_name == "encendido":
                         data[json_key]["focos"]["trabajando"] = value
                 elif plc_name == "PLC3":
+                    if "focos" not in data[json_key]:
+                        data[json_key]["focos"] = {"deteccion": False, "trabajando": False}
                     if var_name == "encendido":
                         data[json_key]["focos"]["trabajando"] = value
                     elif var_name == "deteccion":
@@ -219,6 +282,8 @@ def read_plc_data(plc_name):
                 # Actualizar JSON según la variable
                 if plc_name == "PLC1" and var_name == "modo":
                     # Modo: 0=off, 1=adelante, 2=reversa
+                    if "focos" not in data[json_key]:
+                        data[json_key]["focos"] = {"encendido": False, "adelante": False, "reversa": False}
                     data[json_key]["focos"]["adelante"] = (value == 1)
                     data[json_key]["focos"]["reversa"] = (value == 2)
                     if value == 1:
@@ -317,7 +382,12 @@ def plc1_control(action):
     if action == "encender":
         # Lee el estado actual
         data = read_db_json()
-        current_state = data["plc1"]["focos"]["encendido"]
+        if "plc1" not in data or "focos" not in data["plc1"]:
+            logger.warning("Estructura de datos incorrecta para PLC1")
+            data = get_default_data()
+            write_db_json(data)
+        
+        current_state = data["plc1"]["focos"].get("encendido", False)
         # Activa/desactiva el encendido
         new_state = not current_state
         result = write_plc_variable("PLC1", "encendido", new_state)
@@ -329,11 +399,15 @@ def plc1_control(action):
     elif action == "adelante":
         # Lee el estado actual
         data = read_db_json()
-        if not data["plc1"]["focos"]["encendido"]:
+        if "plc1" not in data or "focos" not in data["plc1"]:
+            logger.warning("Estructura de datos incorrecta para PLC1")
+            return False
+        
+        if not data["plc1"]["focos"].get("encendido", False):
             add_log_entry("PLC1: No se puede avanzar, sistema apagado")
             return False
         
-        current_adelante = data["plc1"]["focos"]["adelante"]
+        current_adelante = data["plc1"]["focos"].get("adelante", False)
         if current_adelante:
             # Si ya está en adelante, lo ponemos en modo 0
             return write_plc_variable("PLC1", "modo", 0)
@@ -344,11 +418,15 @@ def plc1_control(action):
     elif action == "reversa":
         # Lee el estado actual
         data = read_db_json()
-        if not data["plc1"]["focos"]["encendido"]:
+        if "plc1" not in data or "focos" not in data["plc1"]:
+            logger.warning("Estructura de datos incorrecta para PLC1")
+            return False
+        
+        if not data["plc1"]["focos"].get("encendido", False):
             add_log_entry("PLC1: No se puede retroceder, sistema apagado")
             return False
         
-        current_reversa = data["plc1"]["focos"]["reversa"]
+        current_reversa = data["plc1"]["focos"].get("reversa", False)
         if current_reversa:
             # Si ya está en reversa, lo ponemos en modo 0
             return write_plc_variable("PLC1", "modo", 0)
@@ -365,7 +443,14 @@ def plc2_control(action):
     if action == "toggle":
         # Lee el estado actual
         data = read_db_json()
-        current_state = data["plc2"]["focos"]["trabajando"]
+        if "plc2" not in data or "focos" not in data["plc2"]:
+            logger.warning("Estructura de datos incorrecta para PLC2")
+            data = get_default_data()
+            write_db_json(data)
+            current_state = False
+        else:
+            current_state = data["plc2"]["focos"].get("trabajando", False)
+        
         # Activa/desactiva el encendido
         return write_plc_variable("PLC2", "encendido", not current_state)
     
@@ -386,11 +471,17 @@ def plc3_control(action):
     if action == "toggle":
         # Lee el estado actual
         data = read_db_json()
-        current_state = data["plc3"]["focos"]["trabajando"]
+        if "plc3" not in data or "focos" not in data["plc3"]:
+            logger.warning("Estructura de datos incorrecta para PLC3")
+            data = get_default_data()
+            write_db_json(data)
+            current_state = False
+        else:
+            current_state = data["plc3"]["focos"].get("trabajando", False)
+        
         write_plc_variable("PLC3", "comando", 0)
         # Activa/desactiva el encendido
         return write_plc_variable("PLC3", "encendido", not current_state)
-        
     
     elif action == "reiniciar":
         # Envia comando reset (1)
@@ -436,6 +527,10 @@ def start_polling():
 
 def initialize():
     """Inicializa la comunicación con los PLCs y comienza el sondeo"""
+    # Verificar y restaurar la estructura del archivo JSON
+    data = read_db_json()
+    write_db_json(data)  # Esto garantiza que el archivo esté bien formado desde el inicio
+    
     connect_all_plcs()
     return start_polling()
 

@@ -1,0 +1,111 @@
+{
+    "plc1": {
+        "state": "En espera",
+        "focos": {
+            "encendido": false,
+            "adelante": false,
+            "reversa": false
+        },
+        "botones": {
+            "encender": false,
+            "adelante": false,
+            "reversa": false
+        }
+    },
+    "plc2": {
+        "progress": 100,
+        "focos": {
+            "deteccion": false,
+            "trabajando": false
+        },
+        "botones": {
+            "toggle": false,
+            "reiniciar": false,
+            "skip": false
+        }
+    },
+    "plc3": {
+        "progress": 100,
+        "focos": {
+            "deteccion": false,
+            "trabajando": false
+        },
+        "botones": {
+            "toggle": false,
+            "reiniciar": false,
+            "skip": false
+        }
+    },
+    "robot": {
+        "gcode_line": 0,
+        "total_lines": 100,
+        "foco": "detenido",
+        "botones": {
+            "toggle": false,
+            "reiniciar": false,
+            "skip": false
+        }
+    },
+    "simbolos": {
+        "verde": "trabajando",
+        "amarillo": "detenido",
+        "azul": "terminado"
+    },
+    "log": [
+        "Empacadora: Trabajo pausado",
+        "PLC1: Activado encendido",
+        "PLC1: Modo establecido a Apagado",
+        "PLC1: Modo establecido a Adelante",
+        "PLC1: Modo establecido a Reversa",
+        "PLC1: Modo establecido a Apagado",
+        "PLC2: Activado encendido",
+        "PLC2: Comando Reset enviado",
+        "PLC2: Activado encendido",
+        "PLC3: Comando Reset enviado",
+        "PLC3: Activado encendido",
+        "PLC1: Activado encendido",
+        "PLC1: Modo establecido a Apagado",
+        "PLC1: Modo establecido a Adelante",
+        "PLC2: Activado encendido",
+        "PLC3: Comando Normal enviado",
+        "PLC3: Activado encendido",
+        "PLC3: Comando Normal enviado",
+        "PLC3: Activado encendido",
+        "PLC2: Activado encendido",
+        "PLC2: Comando Reset enviado",
+        "PLC2: Activado encendido",
+        "PLC1: Desactivado encendido",
+        "PLC1: Modo establecido a Apagado",
+        "PLC1: Activado encendido",
+        "PLC1: Modo establecido a Apagado",
+        "PLC1: Modo establecido a Adelante",
+        "PLC3: Comando Reset enviado",
+        "PLC3: Comando Normal enviado",
+        "PLC3: Activado encendido",
+        "PLC1: Activado encendido",
+        "PLC1: Modo establecido a Apagado",
+        "PLC1: Modo establecido a Reversa",
+        "PLC2: Desactivado encendido",
+        "PLC2: Activado encendido",
+        "PLC3: Comando Reset enviado",
+        "PLC3: Comando Normal enviado",
+        "PLC3: Activado encendido",
+        "PLC1: No se puede avanzar, sistema apagado",
+        "ERROR: PLC1 - No se pudo escribir encendido",
+        "PLC1: No se puede avanzar, sistema apagado",
+        "PLC1: Activado encendido",
+        "PLC1: Modo establecido a Apagado",
+        "PLC1: Modo establecido a Adelante",
+        "PLC1: Modo establecido a Reversa",
+        "PLC1: Desactivado encendido",
+        "PLC1: Modo establecido a Apagado",
+        "PLC1: Activado encendido",
+        "PLC1: Modo establecido a Apagado",
+        "PLC1: Desactivado encendido",
+        "PLC1: Modo establecido a Apagado",
+        "PLC1: Activado encendido",
+        "PLC1: Modo establecido a Apagado",
+        "PLC1: Desactivado encendido",
+        "PLC1: Modo establecido a Apagado"
+    ]
+}

@@ -61,23 +61,28 @@
             <h3 class="text-secondary mb-0">Descripción</h3>
             <div class="row gx-4 gx-lg-5">
                 <div class="col-lg-6">
-                    <p>Interface estilo SCADA para control y monitoreo de PLC SIMENS mediante comunicación OPC.</p>
-                    <a class="btn btn-primary btn-xl" href="Recursos\Proyecto\Reporte_automatización_proyecto_final.pdf"
+                    <p>Interfaz estilo SCADA para control y monitoreo de PLC SIMENS mediante comunicación GET/PUT.</p>
+                    <a class="btn btn-primary btn-xl" href="Reportes/Proyecto/assets/Proyecto_PLC.pdf"
                         target="_blank">Reporte PDF</a>
+                    <a class="btn btn-primary btn-xl" href="Reportes/Proyecto/scada_app/Proyecto_final_20250506_2157.zap15_1"
+                        target="_blank">
+                        Descargar Proyecto TIA-PORTAL tipo ARCHIVADO</a>
+                    <a class="btn btn-primary btn-xl" href="assets/Network_1.0 1.zip" target="_blank">
+                        Descargar Proyecto TIA-PORTAL tipo ZIP</a>
                 </div>
                 <div class="col-lg-6">
-                    <img class="img-fluid" width="70%" height="auto" src="Recursos/Imagenes/dashbord.png"
+                    <img class="img-fluid" width="70%" height="auto" src="Reportes/Proyecto/assets/dashbord.png"
                         alt="...">
                 </div>
             </div>
         </div>
-        <!-- <div class="container px-4 px-lg-5 my-5">
+        <div class="container px-4 px-lg-5 my-5">
             <h3 class="text-secondary mb-0">Objetivo general</h3>
             <div class="row gx-4 gx-lg-5">
                 <div class="col-lg-12">
-                    <p>• Construir un barista mediante procesos automatizados aplicando los procesos vistos en clase
-                        (electrotecnia, electroneumática, motores, PLC y sensores) con el propósito de optimizar el
-                        proceso de preparación de café.</p>
+                    <p>• Construir un sistema tipo SCADA para control de PLC via internet, mediante una red de 3 PLC
+                        Simens (2 s7-1200 y 1 s7-1500);
+                        que pueda enviar y recibir información de los procesos que está llevando acabo el sistema.</p>
                 </div>
             </div>
         </div>
@@ -86,38 +91,204 @@
             <div class="row gx-4 gx-lg-5">
                 <div class="col-lg-12">
                     <ul class="list-group">
-                        <li class="list-group-item">• Diseñar y construir un circuito neumático que permita controlar el
-                            flujo y entrega final del café ya preparado.</li>
-                        <li class="list-group-item">• Diseñar y construir un circuito eléctrico que permita seleccionar el tipo de café y de leche que guste el
-                            usuario.
-                            </li>
-                        <li class="list-group-item">• Crear un diagrama de bloques ejecutable en el PLC para el control de un motor a pasos (selector de
-                            leche) y comunicación con mediante pines I/O con Robot UR5e para establecer la secuencia de trabajo
-                            para la elaboración de un café.</li>
+                        <li class="list-group-item">• Diseñar y construir tres circuitos con sus sensores y actuadores,
+                            que simulen un proceso.</li>
+                        <li class="list-group-item">• Diseñar y construir tres programas de PLC para el control de cada
+                            uno de los procesos simulando un ambiente industrial con IoT.</li>
+                        <li class="list-group-item">• Conectar los PLC para formar una red intercomunicada para control
+                            por botónes, HMI o una interfaz externa.</li>
+                        <li class="list-group-item">• Diseñar una interfaz web para el control y monitoreo de los
+                            procesos.</li>
+                        <li class="list-group-item">• Implementar una API en python para la comunicación con los PLC.
+                        </li>
                     </ul>
                 </div>
             </div>
-        </div> -->
-
-
+        </div>
     </section>
     <!-- Events Section -->
+    <section class="py-5 text-white">
+        <div class="container px-4 px-lg-5 my-5">
+            <h3 class="text-secondary mb-0">Proyecto</h3>
+            <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px;">
+                <div class="card col-md-12 d-flex align-items-stretch">
+                    <div class="container">
+                        <div class="card-body text-center mt-3">
+                            <h5 class="card-title"><a href="#">Revisar Github del proyecto</a></h5>
+                            <a class="btn btn-primary btn-xl"
+                                href="https://github.com/JPHAJP/Simens_PLC_Comms/tree/main/Web/Reportes/Proyecto/scada_app"
+                                target="_blank"> Github de API Python</a>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="Reportes/Proyecto/assets/V1.mp4" controls
+                                        muted autoplay loop></video>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card">
+                                <iframe id="pdfViewer" src="Reportes/Proyecto/assets/Proyecto_PLC.pdf" width="100%"
+                                    height="800px"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- PLC 1 -->
+            <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px;">
+                <div class="card col-md-12 d-flex align-items-stretch">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="Reportes/Proyecto/assets/V1.mp4" controls
+                                        muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="Reportes/Proyecto/assets/V1.mp4" controls
+                                        muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="Reportes/Proyecto/assets/V1.mp4" controls
+                                        muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-12">
+                                <div class="card">
+                                    <iframe id="pdfViewer" src="Reportes/Proyecto/assets/V1.mp4" width="100%" height="800px"></iframe>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="card-body text-center mt-3">
+                            <h5 class="card-title"><a href="#">PLC control de banda transportadora con control de
+                                    dirección</a></h5>
+                            <p class="fst-italic text-black"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- PLC 2 -->
+            <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px;">
+                <div class="card col-md-12 d-flex align-items-stretch">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="Reportes/Proyecto/assets/V1.mp4" controls
+                                        muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="Reportes/Proyecto/assets/V1.mp4" controls
+                                        muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="Reportes/Proyecto/assets/V1.mp4" controls
+                                        muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-12">
+                                <div class="card">
+                                    <iframe id="pdfViewer" src="Reportes/Proyecto/assets/V1.mp4" width="100%" height="800px"></iframe>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="card-body text-center mt-3">
+                            <h5 class="card-title"><a href="#">PLC control de revolvedora con pistones neumáticos</a>
+                            </h5>
+                            <p class="fst-italic text-black"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- PLC 3 -->
+            <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px;">
+                <div class="card col-md-12 d-flex align-items-stretch">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="Reportes/Proyecto/assets/V1.mp4" controls
+                                        muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="Reportes/Proyecto/assets/V1.mp4" controls
+                                        muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="Reportes/Proyecto/assets/V1.mp4" controls
+                                        muted autoplay loop></video>
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-12">
+                                <div class="card">
+                                    <iframe id="pdfViewer" src="Reportes/Proyecto/assets/V1.mp4" width="100%" height="800px"></iframe>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="card-body text-center mt-3">
+                            <h5 class="card-title"><a href="#">PLC control de empacadora con motor y varidor de
+                                    frecuencia</a></h5>
+                            <p class="fst-italic text-black"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     <!-- Agregar un iframe para ver otra pagina web-->
     <div class="container my-4">
         <div class="card shadow">
-          <div class="card-header bg-dark text-white">
-            Vista de otra página web
-          </div>
-          <div class="card-body p-0" style="height: 800px;">
-            <iframe src="https://opc-scada-simens.onrender.com/" frameborder="0"
-                    style="width: 100%; height: 100%;" allowfullscreen></iframe>
-          </div>
-          <div class="card-footer text-muted text-end">
-            Mostrando contenido externo
-          </div>
+            <div class="card-header bg-dark text-white">
+                Vista de otra página web
+            </div>
+            <div class="card-body p-0" style="height: 800px;">
+                <iframe src="https://opc-scada-simens.onrender.com/" frameborder="0" style="width: 100%; height: 100%;"
+                    allowfullscreen></iframe>
+            </div>
+            <div class="card-footer text-muted text-end">
+                Mostrando contenido externo
+            </div>
+            <a class="btn btn-primary btn-xl" href="https://opc-scada-simens.onrender.com/" target="_blank"> Visitar
+                web</a>
         </div>
-      </div>
-      
+    </div>
+
+    <section class="py-5 text-white">
+        <div class="container px-4 px-lg-5 my-5">
+            <h3 class="text-secondary mb-0">Conclusiones</h3>
+            <div class="row gx-4 gx-lg-5">
+                <div class="col-lg-12">
+                    <ul class="list-group">
+                        <li class="list-group-item">• El sistema resultó tener que funcionar con una configuración
+                            GET/PUT para control individual de los PLC .</li>
+                        <li class="list-group-item">• La interfaz web se pudo visualizar mediante un tunel TCP expuesto
+                            con NGROK, lo que permitió la conexión desde cualquier red.</li>
+                        <li class="list-group-item">• Los procesos en el PLC se optimizaron para mejorar la eficiencia
+                            del sistema.</li>
+                        <li class="list-group-item">• Se verificó que todas las conexiones electricas tuvieran sus
+                            sistemas de protección.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
 
 

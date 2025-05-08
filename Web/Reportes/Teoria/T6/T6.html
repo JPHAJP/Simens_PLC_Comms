@@ -57,7 +57,7 @@
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center text-white">
                 <h1 class="display-4 fw-bolder">Trabajo 6</h1>
-                <p class="lead fw-normal text-white-50 mb-0">Sistema SCADA Web</p>
+                <p class="lead fw-normal text-white-50 mb-0">Comunicaciones Web con PLC</p>
                 <a class="btn btn-primary btn-xl" href="../../../teoria.html">Regresar a Teoría</a>
             </div>
         </div>
@@ -68,56 +68,17 @@
             <h3 class="text-secondary mb-0">Introducción</h3>
             <div class="row gx-4 gx-lg-5">
                 <div class="col-lg-6">
-                    <p>Se utilizan dispositivos PLC en interconexión mediante PROFINET.
+                    <p>Se utilizan dispositivos PLC en interconexión mediante PROFINET, OPC UA y comunicaciones GET/PUT.
                     </p>
-                    <a class="btn btn-primary btn-xl" href="assets/Practica_Network_1.0_20250319_1227.zap15_1" target="_blank">
-                        Descargar Proyecto TIA-PORTAL tipo ARCHIVADO</a>
-                        <a class="btn btn-primary btn-xl" href="assets/Network_1.0 1.zip" target="_blank">
-                            Descargar Proyecto TIA-PORTAL tipo ZIP</a>
+                    <a class="btn btn-primary btn-xl" href="assets/Practica_Network_1.0_20250319_1227.zap15_1"
+                        target="_blank">
+                        Descargar Proyecto TIA-PORTAL para OPC UA</a>
+                    <a class="btn btn-primary btn-xl" href="assets/Network_1.0 1.zip" target="_blank">
+                        Descargar Proyecto TIA-PORTAL para GET/PUT</a>
                 </div>
                 <div class="col-lg-6">
                     <img class="img-fluid" width="50%" height="auto"
-                        src="https://www.plc-city.com/shop/67243-thickbox_default/6av2123-2ga03-0ax0-nfo.jpg"
-                        alt="...">
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Events Section -->
-    <section id="events" class="events section">
-        <div class="container" data-aos="fade-up">
-            <div class="row">
-                <!-- Primera tarjeta -->
-                <div class="col-md-12 d-flex align-items-stretch">
-                    <div class="card col-md-12 d-flex align-items-stretch">
-                        <div class="card-img">
-                            <iframe id="pdfViewer"
-                                src="assets/Comunicaciones Industriales cap1 Redes.pdf"
-                                width="100%" height="800px">
-                            </iframe>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title"><a href="">REDES PLC</a></h5>
-                            <p class="fst-italic text-center"></p>
-                            <p class="card-text"></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Primera tarjeta -->
-                <div class="col-md-12 d-flex align-items-stretch">
-                    <div class="card col-md-12 d-flex align-items-stretch">
-                        <div class="card-img">
-                            <iframe id="pdfViewer"
-                                src="assets/Comunicaciones Industriales cap4 Ethernet.pdf"
-                                width="100%" height="800px">
-                            </iframe>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title"><a href="">Ethernet</a></h5>
-                            <p class="fst-italic text-center"></p>
-                            <p class="card-text"></p>
-                        </div>
-                    </div>
+                        src="../../../Recursos/Imagenes/T6.png" alt="...">
                 </div>
             </div>
         </div>
@@ -125,36 +86,67 @@
 
     <section class="py-5 text-white">
         <div class="container px-4 px-lg-5 my-5">
-            <h3 class="text-secondary mb-0">Ejercicio</h3>
-            <!-- <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px;">
-                <div class="card col-md-12 d-flex align-items-stretch">
-                    <div class="container">
-                        <div class="card-body text-center mt-3">
-                            <h5 class="card-title"><a href="#">Cálculos en excel</a></h5>
-                            <a class="btn btn-primary btn-xl" href="assets/Practica_2.xlsx" target="_blank"> Descargar archivo</a>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+            
+            <h3 class="text-secondary mb-0">Ejercicio con OPC</h3>
             <!-- Ejercicio 1 -->
             <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px;">
                 <div class="card col-md-12 d-flex align-items-stretch">
+                    <div class="card-body text-center mt-3">
+                        <h5 class="card-title"><a href="#">Revisar Github del proyecto</a></h5>
+                        <a class="btn btn-primary btn-xl"
+                            href="https://github.com/JPHAJP/Simens_PLC_Comms/tree/main/Web/Reportes/Teoria/T6/assets/simple_scada"
+                            target="_blank"> Github de API Python</a>
+                    </div>
+                    <div class="container">
+                        <!-- <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <video width="100%" height="800px" src="assets/V1.mp4" controls muted autoplay
+                                        loop></video>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="col-md-12">
+                            <div class="card">
+                                <iframe id="pdfViewer" src="assets/OPC.pdf" width="100%"
+                                    height="800px"></iframe>
+                            </div>
+                        </div>
+                        <div class="card-body text-center mt-3">
+                            <h5 class="card-title"><a href="#">Ejercicio de interconexión con OPC UA e integración con Python</a></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container px-4 px-lg-5 my-5">
+            <h3 class="text-secondary mb-0">Ejercicio con GET/PUT</h3>
+            <!-- Ejercicio 1 -->
+            <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px;">
+                <div class="card col-md-12 d-flex align-items-stretch">
+                    <div class="card-body text-center mt-3">
+                        <h5 class="card-title"><a href="#">Revisar Github del proyecto</a></h5>
+                        <a class="btn btn-primary btn-xl"
+                            href="https://github.com/JPHAJP/Simens_PLC_Comms/tree/main/Web/Reportes/Teoria/T6/assets/get_put"
+                            target="_blank"> Github de código Python</a>
+                    </div>
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
-                                    <video width="100%" height="800px" src="assets/V1.mp4" controls muted autoplay loop></video>
+                                    <video width="100%" height="800px" src="assets/V2.mp4" controls muted autoplay
+                                        loop></video>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="card">
-                                <iframe id="pdfViewer" src="assets/Practica_network_PLC.pdf" width="100%" height="800px"></iframe>
+                                <iframe id="pdfViewer" src="assets/GET_PUT.pdf" width="100%"
+                                    height="800px"></iframe>
                             </div>
                         </div>
                         <div class="card-body text-center mt-3">
-                            <h5 class="card-title"><a href="#">Ejercicio de interconexión</a></h5>
-                            <p class="fst-italic text-black">Control de 3 PLC y 3 HMI.</p>
+                            <h5 class="card-title"><a href="#">Ejercicio de interconexión con GET/PUT e integración con Python</a></h5>
                         </div>
                     </div>
                 </div>
@@ -229,4 +221,5 @@
     <!-- <script
         src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script> -->
 </body>
+
 </html>

@@ -54,7 +54,10 @@ PLC_DATA_MAPPING = {
             "encendido": {"type": "bool", "byte": 0, "bit": 0, "read_write": True},
             "comando": {"type": "uint", "byte": 2, "read_write": True},  # 0=normal, 1=reset, 2=skip
             "deteccion": {"type": "bool", "byte": 4, "bit": 0, "read_write": False},
-            "progreso": {"type": "int", "byte": 6, "read_write": False}  # 0-20 (convertir a %)
+            "progreso": {"type": "int", "byte": 6, "read_write": False},  # 0-20 (convertir a %)
+            "robot_encendido": {"type": "bool", "byte": 8, "bit": 0, "read_write": True},
+            "robot_comando": {"type": "uint", "byte": 10, "read_write": True},  # 0=normal, 1=reset, 2=skip
+            "robot_progreso": {"type": "int", "byte": 12, "read_write": False}  # 0-20 (convertir a %)
         }
     }
 }
@@ -80,6 +83,11 @@ def get_default_data():
             "progress": 0,
             "focos": {"deteccion": False, "trabajando": False}
         },
+        "robot": {
+            "gcode_line": 0,
+            "total_lines": 100,
+            "foco": "detenido"
+        },
         "log": []
     }
 
@@ -95,7 +103,7 @@ def read_db_json():
                         data = json.loads(content)
                         
                         # Verificar que la estructura es correcta
-                        for key in ["plc1", "plc2", "plc3", "log"]:
+                        for key in ["plc1", "plc2", "plc3", "robot", "log"]:
                             if key not in data:
                                 logger.warning(f"Estructura JSON incorrecta: falta clave '{key}'. Restaurando estructura predeterminada.")
                                 raise ValueError("Estructura JSON incorrecta")
@@ -132,7 +140,7 @@ def write_db_json(data):
             os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
             
             # Verificar que la estructura es correcta antes de escribir
-            for key in ["plc1", "plc2", "plc3", "log"]:
+            for key in ["plc1", "plc2", "plc3", "robot", "log"]:
                 if key not in data:
                     logger.warning(f"Intentando escribir JSON sin la clave '{key}'. Corrigiendo.")
                     data[key] = get_default_data()[key]
@@ -221,6 +229,10 @@ def read_plc_data(plc_name):
             logger.warning(f"Clave {json_key} no encontrada en datos JSON. Inicializando.")
             data[json_key] = get_default_data()[json_key]
         
+        # Asegurar que existe la clave robot
+        if "robot" not in data:
+            data["robot"] = get_default_data()["robot"]
+        
         # Leer variables
         for var_name, var_config in mapping["variables"].items():
             var_type = var_config["type"]
@@ -258,6 +270,9 @@ def read_plc_data(plc_name):
                         data[json_key]["focos"]["trabajando"] = value
                     elif var_name == "deteccion":
                         data[json_key]["focos"]["deteccion"] = value
+                    elif var_name == "robot_encendido":
+                        # Actualizar estado del robot
+                        data["robot"]["foco"] = "trabajando" if value else "detenido"
                 
                 logger.debug(f"{plc_name}.{var_name} (bool) = {value}")
             
@@ -271,6 +286,15 @@ def read_plc_data(plc_name):
                     # Convertir de 0-20 a porcentaje (0-100)
                     percentage = min(100, max(0, int(value * 5)))
                     data[json_key]["progress"] = percentage
+                elif var_name == "robot_progreso":
+                    # Convertir de 0-20 a porcentaje (0-100)
+                    percentage = min(100, max(0, int(value * 5)))
+                    # Actualizar progreso del robot
+                    data["robot"]["gcode_line"] = value
+                    if data["robot"]["total_lines"] > 0:
+                        progress_percent = int((value / data["robot"]["total_lines"]) * 100)
+                        if progress_percent >= 100:
+                            data["robot"]["foco"] = "terminado"
                 
                 logger.debug(f"{plc_name}.{var_name} (int) = {value}")
             
@@ -364,7 +388,7 @@ def write_plc_variable(plc_name, var_name, value):
             if plc_name == "PLC1" and var_name == "modo":
                 mode_str = "Apagado" if value == 0 else "Adelante" if value == 1 else "Reversa"
                 message = f"{plc_name}: Modo establecido a {mode_str}"
-            elif var_name == "comando":
+            elif var_name == "comando" or var_name == "robot_comando":
                 cmd_str = "Normal" if value == 0 else "Reset" if value == 1 else "Skip"
                 message = f"{plc_name}: Comando {cmd_str} enviado"
             else:
@@ -495,6 +519,34 @@ def plc3_control(action):
         logger.warning(f"Acción desconocida para PLC3: {action}")
         return False
 
+def robot_control(action):
+    """Controla las acciones del Robot (mediante PLC3)"""
+    if action == "toggle":
+        # Lee el estado actual
+        data = read_db_json()
+        if "robot" not in data:
+            logger.warning("Estructura de datos incorrecta para Robot")
+            data = get_default_data()
+            write_db_json(data)
+            current_state = False
+        else:
+            current_state = (data["robot"].get("foco", "detenido") == "trabajando")
+        
+        # Activa/desactiva el encendido
+        return write_plc_variable("PLC3", "robot_encendido", not current_state)
+    
+    elif action == "reiniciar":
+        # Envia comando reset (1)
+        return write_plc_variable("PLC3", "robot_comando", 1)
+    
+    elif action == "skip":
+        # Envia comando skip (2)
+        return write_plc_variable("PLC3", "robot_comando", 2)
+    
+    else:
+        logger.warning(f"Acción desconocida para Robot: {action}")
+        return False
+
 def poll_plcs_task():
     """Función que se ejecuta en un hilo para sondear periódicamente los PLCs"""
     while True:
@@ -546,6 +598,8 @@ def process_action(plc, action):
         return plc2_control(action)
     elif plc == "plc3":
         return plc3_control(action)
+    elif plc == "robot":
+        return robot_control(action)
     else:
         logger.warning(f"PLC desconocido: {plc}")
         return False

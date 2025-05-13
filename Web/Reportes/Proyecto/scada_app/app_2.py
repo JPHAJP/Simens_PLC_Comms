@@ -236,41 +236,70 @@ def robot_button():
         if not action:
             return jsonify({"status": "error", "message": "Acción no especificada"}), 400
         
-        # Utilizamos el semáforo para evitar problemas de concurrencia
+        # Utilizamos el módulo snap7_bridge para interactuar con el PLC3
+        logger.info(f"Procesando acción Robot: {action}")
+        success = snap7_bridge.process_action("robot", action)
+        
+        # Leer los datos actualizados
         data = read_db()
         
-        # Asegurarse de que la estructura sea correcta
-        if 'robot' not in data:
-            data['robot'] = {'foco': 'detenido', 'gcode_line': 0, 'total_lines': 100}
-        
-        robot = data.get('robot', {})
-        log_entry = ""
-        
-        if action == 'toggle':
-            current_state = robot.get('foco', 'detenido')
-            new_state = 'detenido' if current_state == 'trabajando' else 'trabajando'
-            robot['foco'] = new_state
-            log_entry = "Robot: " + ("Detenido" if new_state == 'detenido' else "Iniciando trabajo")
-        elif action == 'reiniciar':
-            robot['gcode_line'] = 0
-            log_entry = "Robot: Proceso reiniciado"
-        elif action == 'skip':
-            robot['gcode_line'] = robot.get('total_lines', 100)
-            log_entry = "Robot: Proceso completado (skip)"
-        else:
-            return jsonify({"status": "error", "message": "Acción desconocida"}), 400
-
-        data['robot'] = robot
-        write_db(data)
-        
-        # Añadir log usando la función de snap7_bridge
-        if log_entry:
-            snap7_bridge.add_log_entry(log_entry)
+        if not success:
+            logger.warning(f"Error al procesar acción Robot: {action}")
+            return jsonify({"status": "error", "message": f"Error al procesar acción {action}"}), 400
         
         return jsonify(data)
     except Exception as e:
         logger.error(f"Error en robot_button: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
+
+
+
+# @app.route('/api/robot/button', methods=['POST'])
+# def robot_button():
+#     try:
+#         update = request.get_json()
+#         if not update:
+#             return jsonify({"status": "error", "message": "Datos JSON no válidos"}), 400
+            
+#         action = update.get('action')
+#         if not action:
+#             return jsonify({"status": "error", "message": "Acción no especificada"}), 400
+        
+#         # Utilizamos el semáforo para evitar problemas de concurrencia
+#         data = read_db()
+        
+#         # Asegurarse de que la estructura sea correcta
+#         if 'robot' not in data:
+#             data['robot'] = {'foco': 'detenido', 'gcode_line': 0, 'total_lines': 100}
+        
+#         robot = data.get('robot', {})
+#         log_entry = ""
+        
+#         if action == 'toggle':
+#             current_state = robot.get('foco', 'detenido')
+#             new_state = 'detenido' if current_state == 'trabajando' else 'trabajando'
+#             robot['foco'] = new_state
+#             log_entry = "Robot: " + ("Detenido" if new_state == 'detenido' else "Iniciando trabajo")
+#         elif action == 'reiniciar':
+#             robot['gcode_line'] = 0
+#             log_entry = "Robot: Proceso reiniciado"
+#         elif action == 'skip':
+#             robot['gcode_line'] = robot.get('total_lines', 100)
+#             log_entry = "Robot: Proceso completado (skip)"
+#         else:
+#             return jsonify({"status": "error", "message": "Acción desconocida"}), 400
+
+#         data['robot'] = robot
+#         write_db(data)
+        
+#         # Añadir log usando la función de snap7_bridge
+#         if log_entry:
+#             snap7_bridge.add_log_entry(log_entry)
+        
+#         return jsonify(data)
+#     except Exception as e:
+#         logger.error(f"Error en robot_button: {e}")
+#         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/logout')
 def logout():

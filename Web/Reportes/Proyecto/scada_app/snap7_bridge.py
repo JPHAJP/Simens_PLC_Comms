@@ -56,8 +56,8 @@ PLC_DATA_MAPPING = {
             "deteccion": {"type": "bool", "byte": 4, "bit": 0, "read_write": False},
             "progreso": {"type": "int", "byte": 6, "read_write": False},  # 0-20 (convertir a %)
             "robot_encendido": {"type": "bool", "byte": 8, "bit": 0, "read_write": True},
-            "robot_comando": {"type": "uint", "byte": 10, "read_write": True},  # 0=normal, 1=reset, 2=skip
-            "robot_progreso": {"type": "int", "byte": 12, "read_write": False}  # 0-20 (convertir a %)
+            "robot_comando": {"type": "uint", "byte": 12, "read_write": True},  # 0=normal, 1=reset, 2=skip
+            "robot_progreso": {"type": "int", "byte": 10, "read_write": False}  # 0-20 (convertir a %)
         }
     }
 }
@@ -85,7 +85,6 @@ def get_default_data():
         },
         "robot": {
             "gcode_line": 0,
-            "total_lines": 100,
             "foco": "detenido"
         },
         "log": []
@@ -289,12 +288,11 @@ def read_plc_data(plc_name):
                 elif var_name == "robot_progreso":
                     # Convertir de 0-20 a porcentaje (0-100)
                     percentage = min(100, max(0, int(value * 5)))
-                    # Actualizar progreso del robot
-                    data["robot"]["gcode_line"] = value
-                    if data["robot"]["total_lines"] > 0:
-                        progress_percent = int((value / data["robot"]["total_lines"]) * 100)
-                        if progress_percent >= 100:
-                            data["robot"]["foco"] = "terminado"
+                    # Actualizar progreso del robot con el porcentaje
+                    data["robot"]["gcode_line"] = percentage
+                    # Actualizar estado si completado
+                    if percentage >= 100:
+                        data["robot"]["foco"] = "terminado"
                 
                 logger.debug(f"{plc_name}.{var_name} (int) = {value}")
             

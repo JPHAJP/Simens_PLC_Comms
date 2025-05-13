@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         },
         robot: {
-            foco: '',
+            trabajando: false,
             progress: 0,
             botones: {
                 toggle: false,
@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const btnPlc2Toggle = document.getElementById('plc2-toggle');
         btnPlc2Toggle.innerHTML = data.plc2.botones.toggle
             ? '<i class="fas fa-pause"></i> Pausar'
-            : '<i class="fas fa-play"></i> Continuar';
+            : '<i class="fas fa-play"></i> / <i class="fas fa-pause"></i>';
         previousState.plc2.botones.toggle = data.plc2.botones.toggle;
 
 
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const btnPlc3Toggle = document.getElementById('plc3-toggle');
         btnPlc3Toggle.innerHTML = data.plc3.botones.toggle
             ? '<i class="fas fa-pause"></i> Pausar'
-            : '<i class="fas fa-play"></i> Continuar';
+            : '<i class="fas fa-play"></i> / <i class="fas fa-pause"></i>';
         previousState.plc3.botones.toggle = data.plc3.botones.toggle;
 
 
@@ -349,66 +349,63 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // -------- Actualizar Robot --------
         const robotProgress = document.getElementById('robot-progress');
-        const robotPercent = Math.round((data.robot.gcode_line / data.robot.total_lines) * 100);
-        robotProgress.style.width = robotPercent + '%';
-        robotProgress.setAttribute('aria-valuenow', robotPercent);
-        robotProgress.innerText = robotPercent + '%';
+        // Usa gcode_line como porcentaje en lugar de progress
+        const currentRobotProgress = data.robot.gcode_line;
+        robotProgress.style.width = currentRobotProgress + '%';
+        robotProgress.setAttribute('aria-valuenow', currentRobotProgress);
+        robotProgress.innerText = currentRobotProgress + '%';
 
-        if (robotPercent === 100 && previousState.robot.progress < 100) {
-            addLogEntry('Robot: Código G completado al 100%', 'success');
-        } else if (robotPercent === 0 && previousState.robot.progress > 0) {
-            addLogEntry('Robot: Código G reiniciado', 'info');
+        if (currentRobotProgress === 100 && previousState.robot.progress < 100) {
+            addLogEntry('Robot: Proceso completado al 100%', 'success');
+        } else if (currentRobotProgress === 0 && previousState.robot.progress > 0) {
+            addLogEntry('Robot: Proceso reiniciado', 'info');
         }
-        previousState.robot.progress = robotPercent;
+        previousState.robot.progress = currentRobotProgress;
 
-        document.getElementById('robot-line').innerText = data.robot.gcode_line;
-        document.getElementById('robot-total-lines').innerText = data.robot.total_lines;
+        // El robot tiene una estructura diferente en el JSON
+        // No tiene focos.deteccion y focos.trabajando sino un único foco
+        const robotTrabajando = data.robot.foco === "trabajando";
 
-        const robotFoco = document.getElementById('robot-foco');
-        const currentRobotState = data.robot.foco;
+        // Actualizar estados visuales para el robot (solo trabajando)
+        const elemRobotTrabajando = document.getElementById('robot-foco-trabajando');
+        if (robotTrabajando) {
+            elemRobotTrabajando.classList.remove('bg-secondary');
+            elemRobotTrabajando.classList.add('bg-success', 'mb-1');
+        } else {
+            elemRobotTrabajando.classList.remove('bg-success');
+            elemRobotTrabajando.classList.add('bg-secondary', 'mb-1');
+        }
+
+        // También actualizar el span con ID robot-foco
+        const robotFocoGeneral = document.getElementById('robot-foco');
+        robotFocoGeneral.innerText = data.robot.foco;
+        if (data.robot.foco === "trabajando") {
+            robotFocoGeneral.className = 'badge bg-success text-white';
+        } else if (data.robot.foco === "detenido") {
+            robotFocoGeneral.className = 'badge bg-warning text-dark';
+        } else {
+            robotFocoGeneral.className = 'badge bg-secondary text-white';
+        }
 
         // Actualizar estado de los botones Robot
         const btnRobotToggle = document.getElementById('robot-toggle');
-        if (data.robot.botones.toggle !== previousState.robot.botones.toggle) {
-            if (data.robot.botones.toggle) {
-                btnRobotToggle.innerHTML = '<i class="fas fa-pause"></i> Pausar';
-            } else {
-                btnRobotToggle.innerHTML = '<i class="fas fa-play"></i> Continuar';
-            }
-            previousState.robot.botones.toggle = data.robot.botones.toggle;
-        }
+        btnRobotToggle.innerHTML = data.robot.botones.toggle
+            ? '<i class="fas fa-pause"></i> Pausar'
+            : '<i class="fas fa-play"></i> / <i class="fas fa-pause"></i>';
+        previousState.robot.botones.toggle = data.robot.botones.toggle;
 
-        if (currentRobotState !== previousState.robot.foco) {
-            if (currentRobotState === 'trabajando') {
-                robotFoco.classList.remove('bg-secondary', 'bg-warning', 'bg-info');
-                robotFoco.classList.add('bg-success');
-                robotFoco.innerText = 'Trabajando';
-                robotAnimation.classList.add('robot-working');
+        // Detectar cambios reales en Robot
+        if (robotTrabajando !== previousState.robot.trabajando) {
+            if (robotTrabajando) {
                 addLogEntry('Robot: Iniciando trabajo', 'info');
-                toggleOperationTimer('robot', true);
-            } else if (currentRobotState === 'detenido') {
-                robotFoco.classList.remove('bg-secondary', 'bg-success', 'bg-info');
-                robotFoco.classList.add('bg-warning', 'text-dark');
-                robotFoco.innerText = 'Detenido';
-                robotAnimation.classList.remove('robot-working');
-                addLogEntry('Robot: Detenido', 'warning');
-                toggleOperationTimer('robot', false);
-            } else if (currentRobotState === 'terminado') {
-                robotFoco.classList.remove('bg-secondary', 'bg-success', 'bg-warning');
-                robotFoco.classList.add('bg-info', 'text-dark');
-                robotFoco.innerText = 'Terminado';
-                robotAnimation.classList.remove('robot-working');
-                addLogEntry('Robot: Proceso terminado', 'success');
-                toggleOperationTimer('robot', false);
+                robotAnimation.classList.add('robot-working');
             } else {
-                robotFoco.classList.remove('bg-success', 'bg-warning', 'bg-info');
-                robotFoco.classList.add('bg-secondary');
-                robotFoco.innerText = 'Desconocido';
+                addLogEntry('Robot: Deteniendo trabajo', 'warning');
                 robotAnimation.classList.remove('robot-working');
-                toggleOperationTimer('robot', false);
             }
-            previousState.robot.foco = currentRobotState;
+            previousState.robot.trabajando = robotTrabajando;
         }
+        toggleOperationTimer('robot', robotTrabajando);
 
         // -------- Actualizar el log completo si ha cambiado --------
         if (data.log && Array.isArray(data.log)) {
@@ -583,7 +580,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('plc3-toggle').addEventListener('click', function () {
         const buttonText = this.textContent.trim();
         if (buttonText.includes('Pausar')) {
-            this.innerHTML = '<i class="fas fa-play"></i> Continuar';
+            this.innerHTML = '<i class="fas fa-play"></i> / <i class="fas fa-pause"></i>';
             addLogEntry('Comando: Pausar empacadora', 'info');
         } else {
             this.innerHTML = '<i class="fas fa-pause"></i> Pausar';
@@ -633,24 +630,30 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('robot-toggle').addEventListener('click', function () {
-        const buttonText = this.textContent.trim();
-        if (buttonText.includes('Pausar')) {
-            this.innerHTML = '<i class="fas fa-play"></i> Continuar';
-            addLogEntry('Comando: Pausar robot', 'info');
-        } else {
-            this.innerHTML = '<i class="fas fa-pause"></i> Pausar';
-            addLogEntry('Comando: Continuar robot', 'info');
-        }
+        // Desactivar el botón temporalmente para evitar múltiples clics
+        this.disabled = true;
+
+        // Determinar el nuevo estado que queremos
+        const currentState = previousState.robot.botones.toggle;
+        const newState = !currentState;
+
+        // Log de la acción
+        addLogEntry(`Comando: ${newState ? 'Activar' : 'Pausar'} robot`, 'info');
+
         fetch('/api/robot/button', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'toggle' })
+            body: JSON.stringify({ action: 'toggle', newState: newState })
         })
             .then(response => response.json())
-            .then(data => updateUI(data))
+            .then(data => {
+                updateUI(data);
+                this.disabled = false;
+            })
             .catch(error => {
                 console.error('Error en acción toggle Robot:', error);
                 addLogEntry('Error al enviar comando al robot', 'error');
+                this.disabled = false;
             });
     });
 
@@ -693,3 +696,4 @@ document.addEventListener('DOMContentLoaded', function () {
     // Actualizar la interfaz cada 1000 milisegundos (1 segundo)
     setInterval(fetchData, 1000);
 });
+

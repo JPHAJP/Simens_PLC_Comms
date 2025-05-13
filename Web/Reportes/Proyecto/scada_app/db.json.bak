@@ -52,6 +52,7 @@
         "azul": "terminado"
     },
     "log": [
+<<<<<<< HEAD
         "PLC1: No se puede avanzar, sistema apagado",
         "PLC1: Activado encendido",
         "PLC1: Modo establecido a Apagado",
@@ -152,5 +153,8 @@
         "PLC1: Activado encendido",
         "PLC1: Modo establecido a Apagado",
         "PLC1: Modo establecido a Reversa"
+=======
+        "Empacadora: Trabajo pausado"
+>>>>>>> eab306c92468a8585099fde7e3273a8d22f6e191
     ]
 }

@@ -10,15 +10,7 @@ import snap7_bridge as snap7_bridge
 import threading
 import time
 import cv2
-
 import atexit
-
-#  Variables globales para la webcam
-camera = None
-camera_lock = threading.Lock()
-camera_active = False
-last_frame = None
-stream_clients = set()
 
 app = Flask(__name__)
 DB_FILE = 'Web/Reportes/Proyecto/scada_app/db.json'
@@ -36,33 +28,34 @@ logging.basicConfig(
 
 logger = logging.getLogger("flask_app")
 
-# Semáforo para sincronizar acceso al archivo JSON desde Flask
-json_lock = threading.Lock()
+# Variables globales para la webcam
+camera = None
+output_frame = None
+camera_lock = threading.Lock()
+camera_thread = None
+camera_active = False
 
 def read_db():
     """
-    Lee los datos del archivo JSON utilizando la función mejorada de snap7_bridge
-    para evitar duplicación de código y asegurar consistencia.
+    Lee los datos del archivo JSON utilizando la función de snap7_bridge
     """
     return snap7_bridge.read_db_json()
 
 def write_db(data):
     """
-    Escribe los datos al archivo JSON utilizando la función mejorada de snap7_bridge
-    para evitar duplicación de código y asegurar consistencia.
+    Escribe los datos al archivo JSON
     """
     return snap7_bridge.write_db_json(data)
 
 def add_log_entry(message):
     """
-    Añade una entrada al log utilizando la función de snap7_bridge
+    Añade una entrada al log
     """
     return snap7_bridge.add_log_entry(message)
 
 def get_server_ip():
     """
     Obtiene la IP local del servidor para conexiones LAN.
-    Se conecta a un servidor público (8.8.8.8) para determinar la IP de salida.
     """
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
@@ -75,13 +68,83 @@ def get_server_ip():
         s.close()
     return ip
 
+def initialize_camera():
+    """
+    Inicializa la cámara web
+    """
+    global camera
+    camera = cv2.VideoCapture(0)
+    camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    time.sleep(2.0)  # Permitir que la cámara se inicie
+    logger.info("Cámara inicializada")
+
+def release_camera():
+    """
+    Libera los recursos de la cámara
+    """
+    global camera, camera_active
+    camera_active = False
+    if camera is not None:
+        camera.release()
+        camera = None
+    logger.info("Cámara liberada")
+
+def camera_thread_function():
+    """
+    Función para el hilo de la cámara que captura frames
+    """
+    global camera, output_frame, camera_lock, camera_active
+    
+    logger.info("Hilo de la cámara iniciado")
+    
+    while camera_active:
+        if camera is None or not camera.isOpened():
+            time.sleep(0.1)
+            continue
+            
+        success, frame = camera.read()
+        if not success:
+            time.sleep(0.1)
+            continue
+            
+        # Actualizar el último frame capturado
+        with camera_lock:
+            # Codificar el frame como JPEG
+            ret, buffer = cv2.imencode('.jpg', frame)
+            if ret:
+                output_frame = buffer.tobytes()
+            
+        # Una pequeña pausa para no sobrecargar el CPU
+        time.sleep(0.03)
+    
+    logger.info("Hilo de la cámara detenido")
+
+def generate_frames():
+    """
+    Generador para streaming de video
+    """
+    global output_frame, camera_lock
+    
+    while True:
+        with camera_lock:
+            if output_frame is None:
+                time.sleep(0.1)
+                continue
+            frame_data = output_frame
+        
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame_data + b'\r\n')
+        
+        # Pequeña pausa para no sobrecargar la red
+        time.sleep(0.03)
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == 'POST':
         usuario = request.form.get('username')
         contrasena = request.form.get('password')
-        # Aquí defines tu lógica de autenticación; este es un ejemplo sencillo:
         if usuario == 'admin' and contrasena == 'admin':
             session['logged_in'] = True
             logger.info(f"Usuario {usuario} ha iniciado sesión")
@@ -91,14 +154,13 @@ def login():
             error = 'Credenciales inválidas. Inténtalo de nuevo.'
     return render_template('login.html', error=error)
 
-
 @app.route('/')
 def index():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
         
     # Define el enlace a tu repositorio en GitHub
-    repo_link = "https://jphajp.github.io/Simens_PLC_Comms/"  # Actualiza esta URL
+    repo_link = "https://jphajp.github.io/Simens_PLC_Comms/"
 
     # Obtiene la IP del servidor y forma el enlace del dashboard
     server_ip = get_server_ip()
@@ -247,7 +309,7 @@ def robot_button():
         if not action:
             return jsonify({"status": "error", "message": "Acción no especificada"}), 400
         
-        # Utilizamos el módulo snap7_bridge para interactuar con el PLC3
+        # Utilizamos el módulo snap7_bridge para interactuar con el robot
         logger.info(f"Procesando acción Robot: {action}")
         success = snap7_bridge.process_action("robot", action)
         
@@ -263,67 +325,6 @@ def robot_button():
         logger.error(f"Error en robot_button: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
-def camera_thread_function():
-    """
-    Función que ejecuta un hilo dedicado a capturar frames de la cámara
-    """
-    global camera, camera_active, last_frame
-    
-    logger.info("Hilo de la cámara iniciado")
-    
-    while camera_active:
-        if camera is None or not camera.isOpened():
-            time.sleep(0.1)
-            continue
-            
-        success, frame = camera.read()
-        if not success:
-            time.sleep(0.1)
-            continue
-            
-        # Actualizar el último frame capturado
-        with camera_lock:
-            last_frame = frame.copy()
-            
-        # Una pequeña pausa para no sobrecargar el CPU
-        time.sleep(0.03)
-    
-    logger.info("Hilo de la cámara detenido")
-
-def generate_frames(client_id):
-    """
-    Genera frames desde la webcam para ser transmitidos a un cliente específico
-    """
-    global last_frame, camera_active, stream_clients
-    
-    try:
-        stream_clients.add(client_id)
-        logger.info(f"Cliente {client_id} conectado al stream de video")
-        
-        while camera_active and client_id in stream_clients:
-            with camera_lock:
-                if last_frame is None:
-                    time.sleep(0.1)
-                    continue
-                
-                current_frame = last_frame.copy()
-            
-            # Codificar el frame como JPEG
-            ret, buffer = cv2.imencode('.jpg', current_frame)
-            if not ret:
-                continue
-                
-            # Convertir a bytes y enviar
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
-            
-            # Pequeña pausa para no sobrecargar la red
-            time.sleep(0.05)
-    finally:
-        if client_id in stream_clients:
-            stream_clients.remove(client_id)
-            logger.info(f"Cliente {client_id} desconectado del stream de video")
-
 @app.route('/video_feed')
 def video_feed():
     """
@@ -332,99 +333,56 @@ def video_feed():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     
-    # Generar un ID de cliente único
-    client_id = request.remote_addr + "_" + str(time.time())
+    # Iniciar la cámara si no está activa
+    start_camera()
     
-    return Response(generate_frames(client_id),
+    return Response(generate_frames(),
                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/api/webcam/start', methods=['POST'])
-def start_webcam():
+def start_camera():
     """
-    Inicia la transmisión de la webcam
+    Inicia la cámara y el hilo de captura si no están activos
     """
     global camera, camera_active, camera_thread
     
-    if not session.get('logged_in'):
-        return jsonify({"status": "error", "message": "No autorizado"}), 401
-    
-    try:
-        with camera_lock:
+    with camera_lock:
+        if not camera_active:
+            camera_active = True
+            
             if camera is None:
-                camera = cv2.VideoCapture(0)  # 0 es generalmente la webcam integrada
-                if not camera.isOpened():
-                    return jsonify({"status": "error", "message": "No se pudo acceder a la webcam"}), 500
-                
-                # Configurar la resolución para mejorar el rendimiento
-                camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-                camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-                
-            if not camera_active:
-                camera_active = True
-                # Iniciar el hilo de captura de la cámara
+                initialize_camera()
+            
+            if camera_thread is None or not camera_thread.is_alive():
                 camera_thread = threading.Thread(target=camera_thread_function)
                 camera_thread.daemon = True
                 camera_thread.start()
-        
-        logger.info("Webcam iniciada")
-        add_log_entry("Sistema: Webcam iniciada")
-        return jsonify({"status": "success", "message": "Webcam iniciada"})
-    except Exception as e:
-        logger.error(f"Error al iniciar la webcam: {e}")
-        return jsonify({"status": "error", "message": str(e)}), 500
-
-@app.route('/api/webcam/stop', methods=['POST'])
-def stop_webcam():
-    """
-    Detiene la transmisión de la webcam
-    """
-    global camera, camera_active, stream_clients
-    
-    if not session.get('logged_in'):
-        return jsonify({"status": "error", "message": "No autorizado"}), 401
-    
-    try:
-        with camera_lock:
-            camera_active = False
-            stream_clients.clear()
-            if camera is not None:
-                camera.release()
-                camera = None
-        
-        logger.info("Webcam detenida")
-        add_log_entry("Sistema: Webcam detenida")
-        return jsonify({"status": "success", "message": "Webcam detenida"})
-    except Exception as e:
-        logger.error(f"Error al detener la webcam: {e}")
-        return jsonify({"status": "error", "message": str(e)}), 500
+            
+            logger.info("Webcam iniciada")
+            add_log_entry("Sistema: Webcam iniciada")
 
 @app.route('/api/webcam/capture', methods=['GET'])
 def capture_image():
     """
     Captura una imagen de la webcam
     """
-    global last_frame
+    global output_frame
     
     if not session.get('logged_in'):
         return jsonify({"status": "error", "message": "No autorizado"}), 401
     
     try:
+        # Asegurar que la cámara esté activa
+        start_camera()
+        
         with camera_lock:
-            if last_frame is None:
+            if output_frame is None:
                 return jsonify({"status": "error", "message": "No hay imagen disponible para capturar"}), 400
             
             # Hacer una copia del último frame
-            current_frame = last_frame.copy()
+            image_data = output_frame
             
-        # Codificar la imagen como JPEG
-        ret, buffer = cv2.imencode('.jpg', current_frame)
-        if not ret:
-            return jsonify({"status": "error", "message": "Error al codificar la imagen"}), 500
-            
-        image_bytes = buffer.tobytes()
-        
         # Convertir a base64 para enviar al cliente
-        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+        image_base64 = base64.b64encode(image_data).decode('utf-8')
         logger.info("Imagen capturada de la webcam")
         add_log_entry("Sistema: Imagen capturada de la webcam")
         
@@ -436,47 +394,72 @@ def capture_image():
         logger.error(f"Error al capturar imagen: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
     
+# Añadir estas rutas para el manejo de la webcam
 
 @app.route('/api/webcam/status', methods=['GET'])
 def webcam_status():
     """
     Devuelve el estado actual de la webcam
     """
-    global camera, camera_active
+    global camera_active
     
     if not session.get('logged_in'):
         return jsonify({"status": "error", "message": "No autorizado"}), 401
     
     try:
-        with camera_lock:
-            is_active = camera_active and camera is not None and camera.isOpened()
-            
         return jsonify({
-            "status": "success",
-            "active": is_active,
-            "clients": len(stream_clients)
+            "status": "success", 
+            "active": camera_active
         })
     except Exception as e:
-        logger.error(f"Error al obtener estado de la webcam: {e}")
+        logger.error(f"Error al verificar estado de la webcam: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
-@atexit.register
-def shutdown_app():
+@app.route('/api/webcam/start', methods=['POST'])
+def start_webcam():
+    """
+    Inicia la webcam
+    """
+    if not session.get('logged_in'):
+        return jsonify({"status": "error", "message": "No autorizado"}), 401
+    
     try:
-        # Cierre de Snap7
-        snap7_bridge.shutdown()
-        logger.info("Conexiones Snap7 cerradas")
+        # Iniciar la cámara si no está activa
+        start_camera()
         
-        # Cierre de la webcam
-        global camera, camera_active, stream_clients
-        camera_active = False
-        stream_clients.clear()
-        if camera is not None:
-            camera.release()
-            camera = None
-        logger.info("Webcam liberada")
+        logger.info("Webcam iniciada por solicitud de usuario")
+        add_log_entry("Sistema: Webcam iniciada por usuario")
+        
+        return jsonify({
+            "status": "success"
+        })
     except Exception as e:
-        logger.error(f"Error al cerrar recursos: {e}")
+        logger.error(f"Error al iniciar webcam: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/webcam/stop', methods=['POST'])
+def stop_webcam():
+    """
+    Detiene la webcam
+    """
+    global camera_active
+    
+    if not session.get('logged_in'):
+        return jsonify({"status": "error", "message": "No autorizado"}), 401
+    
+    try:
+        # Liberar la cámara
+        release_camera()
+        
+        logger.info("Webcam detenida por solicitud de usuario")
+        add_log_entry("Sistema: Webcam detenida por usuario")
+        
+        return jsonify({
+            "status": "success"
+        })
+    except Exception as e:
+        logger.error(f"Error al detener webcam: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/logout')
 def logout():
@@ -487,18 +470,6 @@ def logout():
 # Inicializar el bridge de Snap7 al iniciar la aplicación
 polling_thread = None
 
-@app.route('/initialize_snap7')
-def initialize_snap7_route():
-    global polling_thread
-    try:
-        if polling_thread is None:
-            initialize_snap7()
-            return jsonify({"status": "success", "message": "Snap7 inicializado correctamente"})
-        return jsonify({"status": "success", "message": "Snap7 ya estaba inicializado"})
-    except Exception as e:
-        logger.error(f"Error al inicializar Snap7: {e}")
-        return jsonify({"status": "error", "message": str(e)}), 500
-
 def initialize_snap7():
     global polling_thread
     try:
@@ -508,10 +479,19 @@ def initialize_snap7():
         logger.error(f"Error al inicializar Snap7: {e}")
         raise
 
-# Registrar la función para que se ejecute una vez al iniciar
-# Desde Flask 2.3.0, before_first_request está obsoleto
-# Usamos with app.app_context() para ejecutar código de inicialización
-# Esta parte se ejecutará cuando se importe el módulo
+@atexit.register
+def shutdown_app():
+    try:
+        # Cierre de Snap7
+        snap7_bridge.shutdown()
+        logger.info("Conexiones Snap7 cerradas")
+        
+        # Cierre de la webcam
+        release_camera()
+    except Exception as e:
+        logger.error(f"Error al cerrar recursos: {e}")
+
+# Inicialización al arrancar la aplicación
 with app.app_context():
     try:
         initialize_snap7()
@@ -521,17 +501,6 @@ with app.app_context():
         logger.info("Inicialización completada correctamente")
     except Exception as e:
         logger.error(f"Error en la inicialización: {e}")
-
-# Asegurar que las conexiones se cierren al detener la aplicación
-import atexit
-
-@atexit.register
-def shutdown_snap7():
-    try:
-        snap7_bridge.shutdown()
-        logger.info("Conexiones Snap7 cerradas")
-    except Exception as e:
-        logger.error(f"Error al cerrar conexiones Snap7: {e}")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)  # Cambiar debug a False en producción

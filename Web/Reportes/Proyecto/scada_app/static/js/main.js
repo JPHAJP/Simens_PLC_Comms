@@ -1,213 +1,17 @@
-// Crear un espacio de nombres para la webcam
-const webcamHandler = {
-    videoElement: null,
-    startButton: null,
-    stopButton: null,
-    captureButton: null,
-    capturedImage: null,
-    capturedContainer: null,
-    streamActive: false,
-    streamCheckInterval: null,
-    
-    // Inicializar el manejador de webcam
-    init: function() {
-        this.videoElement = document.getElementById('webcam-feed');
-        this.startButton = document.getElementById('start-webcam');
-        this.stopButton = document.getElementById('stop-webcam');
-        this.captureButton = document.getElementById('capture-webcam');
-        this.capturedImage = document.getElementById('captured-image');
-        this.capturedContainer = document.getElementById('captured-image-container');
-        
-        // Configurar los event listeners
-        this.setupEventListeners();
-        
-        // Verificar estado inicial
-        this.checkWebcamStatus();
-        
-        // Configurar el intervalo para verificaciones periódicas
-        // Usa un intervalo más largo para evitar sobrecarga
-        this.streamCheckInterval = setInterval(() => this.checkWebcamStatus(), 5000);
-    },
-    
-    // Configurar los event listeners para los botones
-    setupEventListeners: function() {
-        const self = this;
-        
-        this.startButton.addEventListener('click', function() {
-            self.startWebcam();
-        });
-        
-        this.stopButton.addEventListener('click', function() {
-            self.stopWebcam(); 
-        });
-        
-        this.captureButton.addEventListener('click', function() {
-            self.captureImage();
-        });
-    },
-    
-    // Verificar el estado actual de la webcam
-    checkWebcamStatus: function() {
-        const self = this;
-        
-        fetch('/api/webcam/status')
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                if (data.active) {
-                    self.startButton.disabled = true;
-                    self.stopButton.disabled = false;
-                    self.captureButton.disabled = false;
-                    
-                    if (!self.streamActive) {
-                        // Solo actualiza la fuente si el stream no está activo
-                        self.videoElement.src = '/video_feed?' + new Date().getTime();
-                        self.streamActive = true;
-                    }
-                } else {
-                    self.startButton.disabled = false;
-                    self.stopButton.disabled = true;
-                    self.captureButton.disabled = true;
-                    
-                    if (self.streamActive) {
-                        self.videoElement.src = '';
-                        self.streamActive = false;
-                    }
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Error al verificar estado de la webcam:', error);
-        });
-    },
-    
-    // Iniciar la webcam
-    startWebcam: function() {
-        const self = this;
-        
-        fetch('/api/webcam/start', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                // Establecer la fuente del video con un parámetro de tiempo para evitar caché
-                self.videoElement.src = '/video_feed?' + new Date().getTime();
-                self.startButton.disabled = true;
-                self.stopButton.disabled = false;
-                self.captureButton.disabled = false;
-                self.streamActive = true;
-                
-                // Agregar evento al registro
-                if (typeof addLogEntry === 'function') {
-                    addLogEntry('Webcam iniciada', 'info');
-                }
-            } else {
-                console.error('Error al iniciar la webcam:', data.message);
-                if (typeof addLogEntry === 'function') {
-                    addLogEntry('Error al iniciar la webcam: ' + data.message, 'error');
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            if (typeof addLogEntry === 'function') {
-                addLogEntry('Error al comunicarse con el servidor', 'error');
-            }
-        });
-    },
-    
-    // Detener la webcam
-    stopWebcam: function() {
-        const self = this;
-        
-        fetch('/api/webcam/stop', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                // Eliminar la fuente del video
-                self.videoElement.src = '';
-                self.startButton.disabled = false;
-                self.stopButton.disabled = true;
-                self.captureButton.disabled = true;
-                self.streamActive = false;
-                
-                // Agregar evento al registro
-                if (typeof addLogEntry === 'function') {
-                    addLogEntry('Webcam detenida', 'warning');
-                }
-            } else {
-                console.error('Error al detener la webcam:', data.message);
-                if (typeof addLogEntry === 'function') {
-                    addLogEntry('Error al detener la webcam: ' + data.message, 'error');
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            if (typeof addLogEntry === 'function') {
-                addLogEntry('Error al comunicarse con el servidor', 'error');
-            }
-        });
-    },
-    
-    // Capturar imagen
-    captureImage: function() {
-        const self = this;
-        
-        fetch('/api/webcam/capture')
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                // Mostrar la imagen capturada
-                self.capturedImage.src = data.image;
-                self.capturedContainer.style.display = 'block';
-                
-                // Agregar evento al registro
-                if (typeof addLogEntry === 'function') {
-                    addLogEntry('Imagen capturada desde webcam', 'success');
-                }
-            } else {
-                console.error('Error al capturar imagen:', data.message);
-                if (typeof addLogEntry === 'function') {
-                    addLogEntry('Error al capturar imagen: ' + data.message, 'error');
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            if (typeof addLogEntry === 'function') {
-                addLogEntry('Error al comunicarse con el servidor', 'error');
-            }
-        });
-    },
-    
-    // Limpiar recursos al descartar el manejador
-    cleanup: function() {
-        if (this.streamCheckInterval) {
-            clearInterval(this.streamCheckInterval);
-        }
-    }
-};
-
-// Separar el código de actualización de datos para evitar conflictos con el stream de video
-const dataHandler = {
-    opTimers: {
+document.addEventListener('DOMContentLoaded', function () {
+    // Variables globales
+    let opTimers = {
         plc1: 0,
         plc2: 0,
         plc3: 0,
         robot: 0
-    },
-    previousLog: [],
-    previousState: {
+    };
+
+    // Variable para almacenar el log previo (para evitar duplicados)
+    let previousLog = [];
+
+    // Variables para mantener el estado previo de los dispositivos y botones
+    let previousState = {
         plc1: {
             encendido: false,
             adelante: false,
@@ -247,46 +51,131 @@ const dataHandler = {
                 skip: false
             }
         }
-    },
-    timerIntervals: {},
-    dataFetchInterval: null,
-    
-    // Inicializar el manejador de datos
-    init: function() {
-        // Iniciar la actualización periódica de datos
-        // Utilizamos fetchData directamente en lugar de una función anónima
-        this.dataFetchInterval = setInterval(() => this.fetchData(), 1000);
-    },
-    
-    // Función para obtener datos de la API
-    fetchData: function() {
-        // Usar fetch con opciones que aseguren no caché para datos actualizados
-        fetch('/api/data', {
-            cache: 'no-store',
-            headers: {
-                'Cache-Control': 'no-cache'
-            }
-        })
-        .then(response => response.json())
-        .then(data => this.updateUI(data))
-        .catch(error => {
-            console.error('Error fetching data:', error);
-            // Verificamos que addLogEntry exista antes de llamarla
-            if (typeof addLogEntry === 'function') {
-                addLogEntry('Error de comunicación con el servidor', 'error');
-            }
-        });
-    },
-    
-    // Actualizar la interfaz con los nuevos datos
-    updateUI: function(data) {
-        // La implementación de updateUI existente se mantiene igual
-        // pero ahora es un método de dataHandler
-        
-        // ...
-        // El resto del código de updateUI se mantiene igual
-        // ...
+    };
 
+    // Elementos de animación
+    const logContainer = document.getElementById('log-container');
+    const conveyorAnimation = document.getElementById('conveyor-animation');
+    const conveyorBelt = document.getElementById('conveyor-belt');
+    const pistonAnimation = document.getElementById('piston-animation');
+    const packerAnimation = document.getElementById('packer-animation');
+    const robotAnimation = document.getElementById('robot-animation');
+
+    // Contadores para tiempos de operación
+    let timerIntervals = {};
+
+    // Función para agregar una entrada al log con timestamp
+    function addLogEntry(message, type = 'info') {
+        const logEntry = document.createElement('div');
+        logEntry.className = 'log-entry';
+
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString();
+
+        const timestamp = document.createElement('span');
+        timestamp.className = 'log-timestamp';
+        timestamp.textContent = `[${timeStr}]`;
+
+        const messageSpan = document.createElement('span');
+        switch (type) {
+            case 'warning':
+                messageSpan.className = 'text-warning';
+                break;
+            case 'error':
+                messageSpan.className = 'text-danger';
+                break;
+            case 'success':
+                messageSpan.className = 'text-success';
+                break;
+            default:
+                messageSpan.className = 'text-dark';
+        }
+        messageSpan.textContent = ' ' + message;
+
+        logEntry.appendChild(timestamp);
+        logEntry.appendChild(messageSpan);
+
+        // Se agrega al principio del contenedor
+        logContainer.insertBefore(logEntry, logContainer.firstChild);
+
+        // Limitar a 50 entradas
+        if (logContainer.children.length > 50) {
+            logContainer.removeChild(logContainer.lastChild);
+        }
+    }
+
+    // Función para formatear el tiempo
+    function formatTime(seconds) {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = Math.floor(seconds % 60);
+        return [h.toString().padStart(2, '0'),
+        m.toString().padStart(2, '0'),
+        s.toString().padStart(2, '0')].join(':');
+    }
+
+    // Función para iniciar/detener timers
+    function toggleOperationTimer(device, isActive) {
+        const timerElement = document.getElementById(`op-time-${device}`);
+        if (isActive) {
+            if (timerIntervals[device]) return;
+            timerIntervals[device] = setInterval(() => {
+                opTimers[device]++;
+                timerElement.innerText = formatTime(opTimers[device]);
+            }, 1000);
+        } else {
+            if (timerIntervals[device]) {
+                clearInterval(timerIntervals[device]);
+                timerIntervals[device] = null;
+            }
+        }
+    }
+
+    // Función para activar la banda transportadora
+    function startConveyor(direction = 'forward') {
+        const conveyorBelt = document.getElementById('conveyor-belt');
+        conveyorBelt.classList.remove('conveyor-belt-forward', 'conveyor-belt-reverse');
+
+        if (direction === 'forward') {
+            conveyorBelt.classList.add('conveyor-belt-forward');
+        } else {
+            conveyorBelt.classList.add('conveyor-belt-reverse');
+        }
+    }
+
+    // Función para detener la banda transportadora
+    function stopConveyor() {
+        const conveyorBelt = document.getElementById('conveyor-belt');
+        conveyorBelt.classList.remove('conveyor-belt-forward', 'conveyor-belt-reverse');
+    }
+
+    // Función para activar los pistones
+    function startPistons() {
+        const pistonAnimation = document.getElementById('piston-animation');
+        pistonAnimation.classList.add('piston-active');
+    }
+
+    // Función para detener los pistones
+    function stopPistons() {
+        const pistonAnimation = document.getElementById('piston-animation');
+        pistonAnimation.classList.remove('piston-active');
+    }
+
+    // Función para activar la empacadora
+    function startPacker() {
+        const packerAnimation = document.getElementById('packer-animation');
+        packerAnimation.classList.add('packer-active');
+    }
+
+    // Función para detener la empacadora
+    function stopPacker() {
+        const packerAnimation = document.getElementById('packer-animation');
+        packerAnimation.classList.remove('packer-active');
+    }
+
+
+    // Función para actualizar la interfaz
+    function updateUI(data) {
         // -------- Actualizar PLC1 --------
         document.getElementById('plc1-state').innerText = data.plc1.state;
         const plc1Encendido = data.plc1.focos.encendido;
@@ -536,86 +425,287 @@ const dataHandler = {
 
         // -------- Actualizar eficiencia general (simulada) --------
         updateEfficiency();
-    },
-    
-    // Limpieza de recursos
-    cleanup: function() {
-        if (this.dataFetchInterval) {
-            clearInterval(this.dataFetchInterval);
-        }
-        
-        // Limpiar los intervalos de operación
-        Object.keys(this.timerIntervals).forEach(key => {
-            if (this.timerIntervals[key]) {
-                clearInterval(this.timerIntervals[key]);
-            }
-        });
     }
-};
 
-// Código de inicialización que se ejecuta cuando el DOM está listo
-document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar el manejador de webcam
-    webcamHandler.init();
-    
-    // Inicializar el manejador de datos
-    dataHandler.init();
-    
-    // Configurar los event listeners para los botones principales
-    setupMainEventListeners();
-    
-    // Función para inicializar los event listeners principales
-    function setupMainEventListeners() {
-        // ... todos los event listeners existentes ...
-        // Los event listeners de la webcam ya están manejados por webcamHandler
+    // Función para calcular y actualizar la eficiencia general (simulada)
+    function updateEfficiency() {
+        const plc1Active = document.getElementById('plc1-encendido').classList.contains('bg-success');
+        const plc2Active = document.getElementById('plc2-foco-trabajando').classList.contains('bg-success');
+        const plc3Active = document.getElementById('plc3-foco-trabajando').classList.contains('bg-success');
+        const robotActive = document.getElementById('robot-foco').classList.contains('bg-success');
+
+        // Se cuenta cuántas máquinas están encendidas
+        const activeCount = [plc1Active, plc2Active, plc3Active, robotActive].filter(Boolean).length;
+
+        // La eficiencia se define de forma lineal: 4 encendidas = 100%, 2 = 50%, etc.
+        const efficiency = ((activeCount) / 4) * 100;
+
+        const efficiencyBar = document.getElementById('efficiency-progress');
+        efficiencyBar.style.width = efficiency + '%';
+        efficiencyBar.style.height = '2rem';
+        efficiencyBar.innerText = efficiency + '%';
+
+        if (efficiency > 75) {
+            efficiencyBar.className = 'progress-bar bg-success';
+        } else if (efficiency > 40) {
+            efficiencyBar.className = 'progress-bar bg-warning';
+        } else {
+            efficiencyBar.className = 'progress-bar bg-danger';
+        }
     }
-    
-    // Función para agregar entradas al log global
-    window.addLogEntry = function(message, type = 'info') {
-        const logContainer = document.getElementById('log-container');
-        if (!logContainer) return;
-        
-        const logEntry = document.createElement('div');
-        logEntry.className = 'log-entry';
 
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString();
 
-        const timestamp = document.createElement('span');
-        timestamp.className = 'log-timestamp';
-        timestamp.textContent = `[${timeStr}]`;
+    // Función para obtener los datos de la API
+    // Modificar la función fetchData para evitar interrupciones en la webcam
+    function fetchData() {
+        fetch('/api/data')
+            .then(response => response.json())
+            .then(data => {
+                // Guardar referencia a la webcam antes de actualizar la UI
+                const videoElement = document.getElementById('webcam-feed');
+                const videoSrc = videoElement ? videoElement.src : '';
 
-        const messageSpan = document.createElement('span');
-        switch (type) {
-            case 'warning':
-                messageSpan.className = 'text-warning';
-                break;
-            case 'error':
-                messageSpan.className = 'text-danger';
-                break;
-            case 'success':
-                messageSpan.className = 'text-success';
-                break;
-            default:
-                messageSpan.className = 'text-dark';
+                // Actualizar el resto de la UI
+                updateUI(data);
+
+                // Restaurar el estado de la webcam si estaba activa
+                if (videoElement && videoSrc) {
+                    videoElement.src = videoSrc;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                addLogEntry('Error de comunicación con el servidor', 'error');
+            });
+    }
+
+    // -------- Event Listeners --------
+    document.getElementById('plc1-btn-encender').addEventListener('click', function () {
+        const buttonText = this.textContent.trim();
+        if (buttonText.includes('Encender')) {
+            this.innerHTML = '<i class="fas fa-power-off"></i> Apagar';
+            addLogEntry('Comando: Encender banda transportadora', 'info');
+        } else {
+            this.innerHTML = '<i class="fas fa-power-off"></i> Encender';
+            addLogEntry('Comando: Apagar banda transportadora', 'info');
         }
-        messageSpan.textContent = ' ' + message;
-
-        logEntry.appendChild(timestamp);
-        logEntry.appendChild(messageSpan);
-
-        // Se agrega al principio del contenedor
-        logContainer.insertBefore(logEntry, logContainer.firstChild);
-
-        // Limitar a 50 entradas
-        if (logContainer.children.length > 50) {
-            logContainer.removeChild(logContainer.lastChild);
-        }
-    };
-    
-    // Limpieza cuando la página se descarga
-    window.addEventListener('beforeunload', function() {
-        webcamHandler.cleanup();
-        dataHandler.cleanup();
+        fetch('/api/plc1/button', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'encender' })
+        })
+            .then(response => response.json())
+            .then(data => updateUI(data))
+            .catch(error => {
+                console.error('Error en acción encender:', error);
+                addLogEntry('Error al enviar comando de encendido', 'error');
+            });
     });
+
+    document.getElementById('plc1-btn-adelante').addEventListener('click', function () {
+        addLogEntry('Comando: Banda transportadora - Avance', 'info');
+        fetch('/api/plc1/button', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'adelante' })
+        })
+            .then(response => response.json())
+            .then(data => updateUI(data))
+            .catch(error => {
+                console.error('Error en acción adelante:', error);
+                addLogEntry('Error al enviar comando de avance', 'error');
+            });
+    });
+
+    document.getElementById('plc1-btn-reversa').addEventListener('click', function () {
+        addLogEntry('Comando: Banda transportadora - Reversa', 'info');
+        fetch('/api/plc1/button', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'reversa' })
+        })
+            .then(response => response.json())
+            .then(data => updateUI(data))
+            .catch(error => {
+                console.error('Error en acción reversa:', error);
+                addLogEntry('Error al enviar comando de reversa', 'error');
+            });
+    });
+
+    document.getElementById('plc2-toggle').addEventListener('click', function () {
+        // Desactivar el botón temporalmente para evitar múltiples clics
+        this.disabled = true;
+
+        // Determinar el nuevo estado que queremos
+        const currentState = previousState.plc2.botones.toggle;
+        const newState = !currentState;
+
+        // Log de la acción
+        addLogEntry(`Comando: ${newState ? 'Activar' : 'Pausar'} revolvedora`, 'info');
+
+        fetch('/api/plc2/button', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'toggle', newState: newState })
+        })
+            .then(response => response.json())
+            .then(data => {
+                updateUI(data);
+                this.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error en acción toggle PLC2:', error);
+                addLogEntry('Error al enviar comando a revolvedora', 'error');
+                this.disabled = false;
+            });
+    });
+
+    document.getElementById('plc2-reiniciar').addEventListener('click', function () {
+        addLogEntry('Comando: Reiniciar revolvedora', 'info');
+        fetch('/api/plc2/button', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'reiniciar' })
+        })
+            .then(response => response.json())
+            .then(data => updateUI(data))
+            .catch(error => {
+                console.error('Error en acción reiniciar PLC2:', error);
+                addLogEntry('Error al reiniciar revolvedora', 'error');
+            });
+    });
+
+    document.getElementById('plc2-skip').addEventListener('click', function () {
+        addLogEntry('Comando: Skip revolvedora', 'info');
+        fetch('/api/plc2/button', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'skip' })
+        })
+            .then(response => response.json())
+            .then(data => updateUI(data))
+            .catch(error => {
+                console.error('Error en acción skip PLC2:', error);
+                addLogEntry('Error al enviar comando skip a revolvedora', 'error');
+            });
+    });
+
+    document.getElementById('plc3-toggle').addEventListener('click', function () {
+        const buttonText = this.textContent.trim();
+        if (buttonText.includes('Pausar')) {
+            this.innerHTML = '<i class="fas fa-play"></i> / <i class="fas fa-pause"></i>';
+            addLogEntry('Comando: Pausar empacadora', 'info');
+        } else {
+            this.innerHTML = '<i class="fas fa-pause"></i> Pausar';
+            addLogEntry('Comando: Continuar empacadora', 'info');
+        }
+        fetch('/api/plc3/button', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'toggle' })
+        })
+            .then(response => response.json())
+            .then(data => updateUI(data))
+            .catch(error => {
+                console.error('Error en acción toggle PLC3:', error);
+                addLogEntry('Error al enviar comando a empacadora', 'error');
+            });
+    });
+
+    document.getElementById('plc3-reiniciar').addEventListener('click', function () {
+        addLogEntry('Comando: Reiniciar empacadora', 'info');
+        fetch('/api/plc3/button', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'reiniciar' })
+        })
+            .then(response => response.json())
+            .then(data => updateUI(data))
+            .catch(error => {
+                console.error('Error en acción reiniciar PLC3:', error);
+                addLogEntry('Error al reiniciar empacadora', 'error');
+            });
+    });
+
+    document.getElementById('plc3-skip').addEventListener('click', function () {
+        addLogEntry('Comando: Skip empacadora', 'info');
+        fetch('/api/plc3/button', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'skip' })
+        })
+            .then(response => response.json())
+            .then(data => updateUI(data))
+            .catch(error => {
+                console.error('Error en acción skip PLC3:', error);
+                addLogEntry('Error al enviar comando skip a empacadora', 'error');
+            });
+    });
+
+    document.getElementById('robot-toggle').addEventListener('click', function () {
+        // Desactivar el botón temporalmente para evitar múltiples clics
+        this.disabled = true;
+
+        // Determinar el nuevo estado que queremos
+        const currentState = previousState.robot.botones.toggle;
+        const newState = !currentState;
+
+        // Log de la acción
+        addLogEntry(`Comando: ${newState ? 'Activar' : 'Pausar'} robot`, 'info');
+
+        fetch('/api/robot/button', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'toggle', newState: newState })
+        })
+            .then(response => response.json())
+            .then(data => {
+                updateUI(data);
+                this.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error en acción toggle Robot:', error);
+                addLogEntry('Error al enviar comando al robot', 'error');
+                this.disabled = false;
+            });
+    });
+
+    document.getElementById('robot-reiniciar').addEventListener('click', function () {
+        addLogEntry('Comando: Reiniciar robot', 'info');
+        fetch('/api/robot/button', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'reiniciar' })
+        })
+            .then(response => response.json())
+            .then(data => updateUI(data))
+            .catch(error => {
+                console.error('Error en acción reiniciar Robot:', error);
+                addLogEntry('Error al reiniciar robot', 'error');
+            });
+    });
+
+    document.getElementById('robot-skip').addEventListener('click', function () {
+        addLogEntry('Comando: Skip robot', 'info');
+        fetch('/api/robot/button', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'skip' })
+        })
+            .then(response => response.json())
+            .then(data => updateUI(data))
+            .catch(error => {
+                console.error('Error en acción skip Robot:', error);
+                addLogEntry('Error al enviar comando skip al robot', 'error');
+            });
+    });
+
+    document.getElementById('clear-log').addEventListener('click', function () {
+        logContainer.innerHTML = '';
+        addLogEntry('Log limpiado por el usuario', 'info');
+        previousLog = [];
+    });
+
+    // Actualizar la interfaz cada 1000 milisegundos (1 segundo)
+    setInterval(fetchData, 1000);
 });

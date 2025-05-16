@@ -308,53 +308,28 @@
 
             <!-- Panel lateral - 3 columnas -->
             <div class="col-lg-3">
-                <!-- Card: Simbología -->
+                <!-- Card: Webcam -->
                 <div class="card mb-4">
                     <div class="card-header">
-                        <i class="fas fa-info-circle"></i> Simbología de estados
+                        <i class="fas fa-camera"></i> Monitoreo en vivo
                     </div>
-                    <div class="card-body">
-                        <div class="symbol-list">
-                            <div class="symbol-item">
-                                <div class="symbol-icon" style="background-color: #198754;"></div>
-                                <div class="symbol-text">
-                                    <strong>Verde</strong> = Trabajando / Activo
-                                </div>
-                            </div>
-                            <div class="symbol-item">
-                                <div class="symbol-icon" style="background-color: #ffc107;"></div>
-                                <div class="symbol-text">
-                                    <strong>Amarillo</strong> = Detenido / Pausado
-                                </div>
-                            </div>
-                            <div class="symbol-item">
-                                <div class="symbol-icon" style="background-color: #0dcaf0;"></div>
-                                <div class="symbol-text">
-                                    <strong>Azul</strong> = Terminado / Completado
-                                </div>
-                            </div>
-                            <div class="symbol-item">
-                                <div class="symbol-icon" style="background-color: #dc3545;"></div>
-                                <div class="symbol-text">
-                                    <strong>Rojo</strong> = Error / Alerta
-                                </div>
-                            </div>
-                            <div class="symbol-item">
-                                <div class="symbol-icon" style="background-color: #6c757d;"></div>
-                                <div class="symbol-text">
-                                    <strong>Gris</strong> = Inactivo / Apagado
-                                </div>
-                            </div>
+                    <div class="card-body webcam-container">
+                        <video id="webcam-feed" autoplay playsinline class="img-fluid w-100"></video>
+                        <div class="webcam-controls mt-2 d-flex justify-content-between">
+                            <button class="btn btn-sm btn-primary" id="start-webcam">
+                                <i class="fas fa-play"></i> Iniciar
+                            </button>
+                            <button class="btn btn-sm btn-danger" id="stop-webcam" disabled>
+                                <i class="fas fa-stop"></i> Detener
+                            </button>
+                            <button class="btn btn-sm btn-secondary" id="capture-webcam">
+                                <i class="fas fa-camera"></i> Capturar
+                            </button>
                         </div>
-
-                        <hr>
-
-                        <div class="mt-2">
-                            <div class="mb-2"><i class="fas fa-cog animate-rotating"></i> = Equipo en funcionamiento
-                            </div>
-                            <div class="mb-2"><i class="fas fa-exclamation-triangle animate-pulsing"></i> = Alerta o
-                                advertencia</div>
-                            <div><i class="fas fa-check-circle"></i> = Operación completa</div>
+                        <canvas id="webcam-canvas" style="display: none;"></canvas>
+                        <div id="captured-image-container" class="mt-2" style="display: none;">
+                            <p><strong>Captura reciente:</strong></p>
+                            <img id="captured-image" class="img-fluid w-100" src="">
                         </div>
                     </div>
                 </div>

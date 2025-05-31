@@ -765,3 +765,43 @@ body {
     padding: 3px;
 }
 
+.webcam-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.fullscreen-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.fullscreen-btn:hover {
+    opacity: 1;
+}
+
+/* Estilos para pantalla completa */
+
+
+.webcam-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.fullscreen-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.fullscreen-btn:hover {
+    opacity: 1;
+}

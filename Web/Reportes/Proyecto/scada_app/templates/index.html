@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Gestor OPC Siemens </title>
+    <title>Gestor PLC Siemens </title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <!-- Font Awesome para iconos -->
@@ -19,7 +19,7 @@
     <div class="container-fluid py-4">
         <div class="row justify-content-center mb-4">
             <div class="col-12">
-                <h1 class="text-center mb-4 p-2 bg-primary text-white rounded shadow">Gestor OPC Siemens <i
+                <h1 class="text-center mb-4 p-2 bg-primary text-white rounded shadow">Gestor PLC Siemens <i
                         class="fas fa-industry"></i>
                     <a href="{{ url_for('logout') }}" class="btn btn-outline-light" style="align-self:flex-end;">Cerrar
                         sesión</a>
@@ -314,7 +314,14 @@
                         <i class="fas fa-camera"></i> Monitoreo en vivo
                     </div>
                     <div class="card-body webcam-container">
-                        <img id="webcam-feed" src="" alt="Webcam Feed" class="img-fluid">
+                        <div id="webcam-wrapper" class="webcam-wrapper">
+                            <img id="webcam-feed" src="" alt="Webcam Feed" class="img-fluid">
+                            <!-- Botón de fullscreen dentro del contenedor de la imagen -->
+                            <button class="btn btn-sm btn-info fullscreen-btn" id="toggle-fullscreen"
+                                title="Pantalla completa">
+                                <i class="fas fa-expand" id="fullscreen-icon"></i>
+                            </button>
+                        </div>
                         <div class="webcam-controls mt-2 d-flex justify-content-between">
                             <button class="btn btn-sm btn-primary" id="start-webcam">
                                 <i class="fas fa-play"></i> Iniciar

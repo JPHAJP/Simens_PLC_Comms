@@ -74,8 +74,8 @@ def initialize_camera():
     """
     global camera
     camera = cv2.VideoCapture(0)
-    camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)
+    camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
     time.sleep(2.0)  # Permitir que la cámara se inicie
     logger.info("Cámara inicializada")
 
@@ -164,7 +164,8 @@ def index():
 
     # Obtiene la IP del servidor y forma el enlace del dashboard
     server_ip = get_server_ip()
-    dashboard_link = f"http://{server_ip}:5000"
+    #dashboard_link = f"http://{server_ip}:5000"
+    dashboard_link = f"https://plc.postretogourmet.com"
 
     # Genera el código QR para el dashboard
     try:

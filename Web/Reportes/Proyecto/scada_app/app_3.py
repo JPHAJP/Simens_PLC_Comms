@@ -11,6 +11,7 @@ import threading
 import time
 import cv2
 import atexit
+import struct
 
 app = Flask(__name__)
 DB_FILE = 'Web/Reportes/Proyecto/scada_app/db.json'
@@ -34,6 +35,145 @@ output_frame = None
 camera_lock = threading.Lock()
 camera_thread = None
 camera_active = False
+
+# Variables globales para la cámara IP
+ip_camera_client = None
+ip_output_frame = None
+ip_camera_lock = threading.Lock()
+ip_camera_thread = None
+ip_camera_active = False
+IP_CAMERA_SERVER = "192.168.0.13"  # IP del servidor de cámara
+IP_CAMERA_PORT = 9999
+
+class IPCameraClient:
+    def __init__(self, server_ip, server_port=9999):
+        self.server_ip = server_ip
+        self.server_port = server_port
+        self.client_socket = None
+        self.running = False
+        
+    def recv_all(self, sock, n):
+        """Función auxiliar para recibir exactamente n bytes"""
+        data = bytearray()
+        while len(data) < n:
+            packet = sock.recv(n - len(data))
+            if not packet:
+                return None
+            data.extend(packet)
+        return data
+        
+    def connect_and_receive(self):
+        global ip_output_frame, ip_camera_lock
+        
+        try:
+            self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.client_socket.settimeout(10.0)
+            
+            logger.info(f"Conectando a cámara IP {self.server_ip}:{self.server_port}...")
+            self.client_socket.connect((self.server_ip, self.server_port))
+            logger.info(f"Conectado a cámara IP {self.server_ip}:{self.server_port}")
+            
+            self.client_socket.settimeout(None)
+            self.running = True
+            
+            frame_count = 0
+            
+            while self.running:
+                try:
+                    # Recibir el tamaño del mensaje
+                    raw_msglen = self.recv_all(self.client_socket, 4)
+                    if not raw_msglen:
+                        logger.warning("Conexión cerrada por el servidor de cámara IP")
+                        break
+                    
+                    msglen = struct.unpack('!I', raw_msglen)[0]
+                    
+                    # Recibir los datos del frame
+                    data = self.recv_all(self.client_socket, msglen)
+                    if not data:
+                        logger.warning("Error recibiendo datos del frame IP")
+                        break
+                    
+                    # Actualizar el frame de la cámara IP
+                    with ip_camera_lock:
+                        ip_output_frame = bytes(data)
+                    
+                    frame_count += 1
+                    
+                    if frame_count % 100 == 0:
+                        logger.info(f"Frames IP recibidos: {frame_count}")
+                        
+                except Exception as e:
+                    if self.running:
+                        logger.error(f"Error procesando frame IP: {e}")
+                        time.sleep(0.1)
+                    continue
+                    
+        except Exception as e:
+            logger.error(f"Error de conexión cámara IP: {e}")
+        finally:
+            self.cleanup()
+    
+    def cleanup(self):
+        self.running = False
+        if self.client_socket:
+            try:
+                self.client_socket.close()
+            except:
+                pass
+        logger.info("Cliente de cámara IP desconectado")
+
+def start_ip_camera():
+    """
+    Inicia la cámara IP y el hilo de captura si no están activos
+    """
+    global ip_camera_client, ip_camera_active, ip_camera_thread
+    
+    with ip_camera_lock:
+        if not ip_camera_active:
+            ip_camera_active = True
+            
+            if ip_camera_client is None:
+                ip_camera_client = IPCameraClient(IP_CAMERA_SERVER, IP_CAMERA_PORT)
+            
+            if ip_camera_thread is None or not ip_camera_thread.is_alive():
+                ip_camera_thread = threading.Thread(target=ip_camera_client.connect_and_receive)
+                ip_camera_thread.daemon = True
+                ip_camera_thread.start()
+            
+            logger.info("Cámara IP iniciada")
+            add_log_entry("Sistema: Cámara IP iniciada")
+
+def release_ip_camera():
+    """
+    Libera los recursos de la cámara IP
+    """
+    global ip_camera_client, ip_camera_active
+    
+    ip_camera_active = False
+    if ip_camera_client is not None:
+        ip_camera_client.cleanup()
+        ip_camera_client = None
+    
+    logger.info("Cámara IP liberada")
+
+def generate_ip_frames():
+    """
+    Generador para streaming de video de la cámara IP
+    """
+    global ip_output_frame, ip_camera_lock
+    
+    while True:
+        with ip_camera_lock:
+            if ip_output_frame is None:
+                time.sleep(0.1)
+                continue
+            frame_data = ip_output_frame
+        
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame_data + b'\r\n')
+        
+        time.sleep(0.03)
 
 def read_db():
     """
@@ -480,6 +620,114 @@ def initialize_snap7():
         logger.error(f"Error al inicializar Snap7: {e}")
         raise
 
+@app.route('/ip_video_feed')
+def ip_video_feed():
+    """
+    Ruta para transmitir el video de la cámara IP
+    """
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    
+    # Iniciar la cámara IP si no está activa
+    start_ip_camera()
+    
+    return Response(generate_ip_frames(),
+                   mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/api/ip_camera/status', methods=['GET'])
+def ip_camera_status():
+    """
+    Devuelve el estado actual de la cámara IP
+    """
+    global ip_camera_active
+    
+    if not session.get('logged_in'):
+        return jsonify({"status": "error", "message": "No autorizado"}), 401
+    
+    try:
+        return jsonify({
+            "status": "success", 
+            "active": ip_camera_active
+        })
+    except Exception as e:
+        logger.error(f"Error al verificar estado de la cámara IP: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/ip_camera/start', methods=['POST'])
+def start_ip_camera_route():
+    """
+    Inicia la cámara IP
+    """
+    if not session.get('logged_in'):
+        return jsonify({"status": "error", "message": "No autorizado"}), 401
+    
+    try:
+        start_ip_camera()
+        
+        logger.info("Cámara IP iniciada por solicitud de usuario")
+        add_log_entry("Sistema: Cámara IP iniciada por usuario")
+        
+        return jsonify({
+            "status": "success"
+        })
+    except Exception as e:
+        logger.error(f"Error al iniciar cámara IP: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/ip_camera/stop', methods=['POST'])
+def stop_ip_camera():
+    """
+    Detiene la cámara IP
+    """
+    if not session.get('logged_in'):
+        return jsonify({"status": "error", "message": "No autorizado"}), 401
+    
+    try:
+        release_ip_camera()
+        
+        logger.info("Cámara IP detenida por solicitud de usuario")
+        add_log_entry("Sistema: Cámara IP detenida por usuario")
+        
+        return jsonify({
+            "status": "success"
+        })
+    except Exception as e:
+        logger.error(f"Error al detener cámara IP: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/ip_camera/capture', methods=['GET'])
+def capture_ip_image():
+    """
+    Captura una imagen de la cámara IP
+    """
+    global ip_output_frame
+    
+    if not session.get('logged_in'):
+        return jsonify({"status": "error", "message": "No autorizado"}), 401
+    
+    try:
+        # Asegurar que la cámara IP esté activa
+        start_ip_camera()
+        
+        with ip_camera_lock:
+            if ip_output_frame is None:
+                return jsonify({"status": "error", "message": "No hay imagen IP disponible para capturar"}), 400
+            
+            image_data = ip_output_frame
+            
+        # Convertir a base64 para enviar al cliente
+        image_base64 = base64.b64encode(image_data).decode('utf-8')
+        logger.info("Imagen capturada de la cámara IP")
+        add_log_entry("Sistema: Imagen capturada de la cámara IP")
+        
+        return jsonify({
+            "status": "success", 
+            "image": f"data:image/jpeg;base64,{image_base64}"
+        })
+    except Exception as e:
+        logger.error(f"Error al capturar imagen IP: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 @atexit.register
 def shutdown_app():
     try:
@@ -487,8 +735,9 @@ def shutdown_app():
         snap7_bridge.shutdown()
         logger.info("Conexiones Snap7 cerradas")
         
-        # Cierre de la webcam
+        # Cierre de las cámaras
         release_camera()
+        release_ip_camera()
     except Exception as e:
         logger.error(f"Error al cerrar recursos: {e}")
 

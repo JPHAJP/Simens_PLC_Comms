@@ -280,7 +280,8 @@
                                         <button class="btn btn-primary" id="robot-skip">
                                             <i class="fas fa-forward"></i> Skip
                                         </button>
-                                        <a href="http://ur5.postretogourmet.com" class="btn btn-primary" id="robot-new-task" target="_blank">
+                                        <a href="http://ur5.postretogourmet.com" class="btn btn-primary"
+                                            id="robot-new-task" target="_blank">
                                             <i class="fas fa-diamond" aria-hidden="true"></i> DIBUJAR
                                         </a>
                                     </div>
@@ -310,19 +311,42 @@
 
             <!-- Panel lateral - 3 columnas -->
             <div class="col-lg-3">
-                <!-- Card: Webcam -->
+                <!-- Card: Monitoreo en vivo -->
                 <div class="card mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-camera"></i> Monitoreo en vivo
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-camera"></i> Monitoreo en vivo
+                        </div>
+                        <!-- Toggle para seleccionar cámara -->
+                        <div class="camera-toggle">
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Seleccionar cámara">
+                                <input type="radio" class="btn-check" name="camera-select" id="local-camera"
+                                    autocomplete="off" checked>
+                                <label class="btn btn-outline-primary" for="local-camera">
+                                    <i class="fas fa-desktop"></i> Local
+                                </label>
+
+                                <input type="radio" class="btn-check" name="camera-select" id="ip-camera"
+                                    autocomplete="off">
+                                <label class="btn btn-outline-secondary" for="ip-camera">
+                                    <i class="fas fa-network-wired"></i> IP
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body webcam-container">
                         <div id="webcam-wrapper" class="webcam-wrapper">
-                            <img id="webcam-feed" src="" alt="Webcam Feed" class="img-fluid">
+                            <img id="webcam-feed" src="" alt="Camera Feed" class="img-fluid">
                             <!-- Botón de fullscreen dentro del contenedor de la imagen -->
                             <button class="btn btn-sm btn-info fullscreen-btn" id="toggle-fullscreen"
                                 title="Pantalla completa">
                                 <i class="fas fa-expand" id="fullscreen-icon"></i>
                             </button>
+                            <!-- Indicador de cámara activa -->
+                            <div class="camera-indicator" id="camera-indicator">
+                                <span id="camera-type-text">Cámara Local</span>
+                                <div class="status-dot" id="status-dot"></div>
+                            </div>
                         </div>
                         <div class="webcam-controls mt-2 d-flex justify-content-between">
                             <button class="btn btn-sm btn-primary" id="start-webcam">
